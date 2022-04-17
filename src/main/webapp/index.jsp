@@ -55,7 +55,7 @@
     <div class="topnav">
       <input type="text" placeholder="Search for a User or Post..." />
     </div>
-    <img src="FPLogo.png" />
+    <img src="FPlogo.png"/>
     <div class="auth">
       <button>Login</button>
       <button>Register</button>
