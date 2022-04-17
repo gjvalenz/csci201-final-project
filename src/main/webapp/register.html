@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Login / Sign up</title>
+	<meta charset="UTF-8">
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+	<link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
+	<script>
+	function deleteAllCookies() {
+	}
+	
+	</script>
+	<script>
+		function tryLogin(){
+			
+		}
+	</script>
+	<script>
+		function trySignup(){
+		
+		}
+	</script>
+  <script src="https://apis.google.com/js/api:client.js"></script>
+  <script>
+
+  function attachSignin(element) {
+
+  }
+  </script>
+  <style type="text/css">
+    #customBtn {
+      display: inline-block;
+      width: 100%;
+      white-space: nowrap;
+    }
+    #customBtn:hover {
+      cursor: pointer;
+    }
+    span.buttonText {
+      display: inline-block;
+      vertical-align: middle;
+      padding-left: 40px;
+      padding-right: 40px;
+      font-weight: bold;
+      font-family: 'Helvetica', sans-serif;
+    }
+  </style>
+
+	<style>
+		img.rounded-corners {
+  		border-radius: 36px;
+  		border: 0px;
+		}
+
+		button.search{background-color: #00556e; color: white;}
+		#logo{
+		font-family: 'Lobster', cursive;
+		color: #00556e;
+		font-size: 40px;
+		}
+		
+		.borderless td, .borderless th {border: none;}
+        html{height:100%;}
+		
+		body {
+		margin: 0;
+    	padding: 0;
+    	height:100%;
+        background-color: #6367dd;
+        background-image: linear-gradient(#d0d9dc, #6367dd);
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: contain;
+     	}
+	</style>
+</head>
+<br>
+	
+	<header>
+	<div class="container">
+    	<div class="row">
+      		<div class="col-6">
+        			<div>
+        				<img src="FPlogo.png" alt="GigHub Logo" style="width:200px;height:auto;">
+        			</div>
+        	</div>
+        	
+        	<div class="col-6" align= "right"> 
+        	<br>
+        		<a href="index.html" style="color:gray">Home </a>
+				 &nbsp;&nbsp; 
+        		<a href="login.html" style="color:gray">Login</a>
+
+        	</div>
+        </div>
+   	</div>
+   	</header>
+   	<br>
+   	<hr>
+	<br>
+	<div class="container">
+    	<div class="row">
+      		<div class="col-6">
+      		
+      		<h2>Sign Up</h2>
+      		<form name ="signupform" onSubmit="return trySignup()">
+      			<div class="form-group">
+				<label>Email</label>
+      			<input type="email" class="form-control" name= "sEmail">
+				<label>Name</label>
+      			<input type="name" class="form-control" name= "sName">
+				<label>Password</label>
+      			<input type="password" class="form-control" name="sPassword">
+      			<label>Confirm Password</label>
+      			<input type="password" class="form-control" name="sConfirmPassword">
+				<label>GitHub URL</label>
+      			<input type="gitUrl" class="form-control" name= "sGit">
+				<label>Company</label>
+      			<input type="company" class="form-control" name= "sCompany">
+      			<br>
+      		
+      				
+      			</div>
+    			
+      			<button type="Submit" class="search btn-block form-controll btn "><i class="fa fa-user-plus" aria-hidden="true"></i> Create Account</button>
+      			</div>
+      		</form>
+      		<div id="validateSignup">  </div>
+      		</div>
+      	</div>
+      </div>
+</body>
+</html>
