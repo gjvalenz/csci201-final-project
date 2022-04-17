@@ -3,11 +3,19 @@
   <head>
     <title>Home</title>
     <style>
+      html { 
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+      }
       body {
         height: 600px;
-        background-size: cover;
-        background-color: #ff8a00;
+        background-color: #d0d9dc;
         background-image: linear-gradient(#d0d9dc, #6367dd);
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: contain;
       }
       .topnav {
         text-align: center;
@@ -55,7 +63,7 @@
     <div class="topnav">
       <input type="text" placeholder="Search for a User or Post..." />
     </div>
-    <img src="FPlogo.png"/>
+    <img src="FPlogo.png" />
     <div class="auth">
       <button>Login</button>
       <button>Register</button>
