@@ -3,19 +3,11 @@
   <head>
     <title>Home</title>
     <style>
-      html { 
-        -webkit-background-size: cover;
-        -moz-background-size: cover;
-        -o-background-size: cover;
-        background-size: cover;
-      }
       body {
         height: 600px;
-        background-color: #d0d9dc;
+        background-color: #6367dd;
         background-image: linear-gradient(#d0d9dc, #6367dd);
-        background-position: center;
         background-repeat: no-repeat;
-        background-size: contain;
       }
       .topnav {
         text-align: center;
@@ -65,8 +57,8 @@
     </div>
     <img src="FPlogo.png" />
     <div class="auth">
-      <button>Login</button>
-      <button>Register</button>
+      <button onclick="window.location.href='login.jsp';">Login</button>
+      <button onclick="window.location.href='register.jsp';">Register</button>
     </div>
   </body>
 </html>
