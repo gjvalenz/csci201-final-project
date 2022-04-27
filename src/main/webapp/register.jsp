@@ -2,6 +2,9 @@
 <html>
   <head>
     <title>Register</title>
+    <!--  for later
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+     -->
     <style>
       body {
         height: 600px;
@@ -60,30 +63,31 @@
             <button onclick="window.location.href='login.jsp';">Login To An Existing Account</button>
         </div>>
     </div>
-    <form class="register" action="" method="post">
+    <!--  change this to do a call via ajax so we don't actually need to do form[POST] -->
+    <form class="register" action="./api/user/register" method="post">
         <div class="email">
             <label for="email">Email:</label>
-            <input type="text" id="password">
+            <input name="email" type="text" id="email" required pattern="^(.+)@(.+)$" >
         </div>
         <div class="name">
           <label for="name">Name:</label>
-          <input type="text" id="name">
+          <input name="name" type="text" id="name" required>
       </div>
         <div class="password">
             <label for="password">Password:</label>
-            <input type="text" id="password">
+            <input name="password" type="text" id="password" required>
         </div>
         <div class="confirmPassword">
           <label for="confirmPassword">Confirm Password:</label>
-          <input type="text" id="confirmPassword">
+          <input name="confirmPassword" type="text" id="confirmPassword" required>
       </div>
       <div class="github">
         <label for="github">Github URL:</label>
-        <input type="text" id="github">
+        <input name="github" type="text" id="github">
     </div>
     <div class="company">
       <label for="company">Company:</label>
-      <input type="text" id="company">
+      <input name="company" type="text" id="company">
   </div>
         <button type="submit">Register</button>
     </form>
