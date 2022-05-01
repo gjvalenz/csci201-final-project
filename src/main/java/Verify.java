@@ -262,7 +262,6 @@ public class Verify{
     	String SQL = "SELECT * FROM user WHERE email='" + email +"'";
     	ResultSet rs = null;
     	
-    	//boolean r = false;
 		try {
 			rs = stmt.executeQuery(SQL);
 		} catch (SQLException e) {
