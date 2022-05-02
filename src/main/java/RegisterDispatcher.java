@@ -50,7 +50,6 @@ public class RegisterDispatcher extends HttpServlet {
     	String name = request.getParameter("name");
     	String github = request.getParameter("github");
     	String company = request.getParameter("company");
-
     	
     	
     	//check if inputted data is valid, Validate.java for validating
@@ -65,20 +64,28 @@ public class RegisterDispatcher extends HttpServlet {
     		
     		valid = false;
     	}
+    	
+    	else if(!Verify.isValidGithub(github)) {
+    		
+    		valid = false;
+    	}
+    	else if(!Verify.isValidCompany(github)) {
+    		
+    		valid = false;
+    	}
+    	
     	else if(Verify.emailRegistered(email, request, response)) {
     		
     		valid = false;
     	}
     	
-    	
-    	else if(!Verify.verifyPassword(passkey)) {
-    		valid = false;
-
-    	}
+    
     	
     	else if(!confirmpasskey.equals(passkey)) { //confirm password entry does not match password
     		valid = false;
     	}
+    	
+    	
     	
 
     	
@@ -104,7 +111,7 @@ public class RegisterDispatcher extends HttpServlet {
     		
     		Connection connection = null;
     		try {
-				connection = DriverManager.getConnection(Constant.DBUrl,  Constant.DBUserName, Constant.DBPassword); //user,password
+				connection = DriverManager.getConnection(Constant.DBURL,  Constant.DBUserName, Constant.DBPassword); //user,password
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
