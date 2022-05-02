@@ -40,6 +40,26 @@ public class Verify{
     	
     }
     
+    public static boolean isValidGithub(String github) {
+    	if(github==null) {
+    		return false;
+    	}
+    	//check if it contains non alphabetic characters / non letters
+    	
+    	 return Constant.namePattern.matcher(github).matches();
+    	
+    }
+    
+    public static boolean isValidCompany(String company) {
+    	if(company==null) {
+    		return false;
+    	}
+    	//check if it contains non alphabetic characters / non letters
+    	
+    	 return Constant.namePattern.matcher(company).matches();
+    	
+    }
+    
  
  	//check if password is valid (i.e. not null)
     public static boolean isValidPassword(String password) {
@@ -91,7 +111,7 @@ public class Verify{
         Connection connection = null;
         
         try {
-			connection = DriverManager.getConnection(Constant.DBUrl, Constant.DBUserName, Constant.DBPassword); //XXX
+			connection = DriverManager.getConnection(Constant.DBURL, Constant.DBUserName, Constant.DBPassword); //XXX
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -143,7 +163,7 @@ public class Verify{
         Connection connection = null;
         
         try {
-			connection = DriverManager.getConnection(Constant.DBUrl, Constant.DBUserName, Constant.DBPassword); //user,password
+			connection = DriverManager.getConnection(Constant.DBURL, Constant.DBUserName, Constant.DBPassword); //user,password
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -193,7 +213,7 @@ public class Verify{
     	String SQL = "SELECT passkey FROM final.user WHERE email='" + email +"';";
          
     	try {
-			connection = DriverManager.getConnection(Constant.DBUrl, Constant.DBUserName, Constant.DBPassword); //"com.mysql.jdbc.Driver", url, username, password
+			connection = DriverManager.getConnection(Constant.DBURL, Constant.DBUserName, Constant.DBPassword); //"com.mysql.jdbc.Driver", url, username, password
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -247,7 +267,7 @@ public class Verify{
     	
     	Connection connection = null;
 		try {
-			connection = DriverManager.getConnection(Constant.DBUrl,  Constant.DBUserName, Constant.DBPassword); //"com.mysql.jdbc.Driver", url, username, password
+			connection = DriverManager.getConnection(Constant.DBURL,  Constant.DBUserName, Constant.DBPassword); //"com.mysql.jdbc.Driver", url, username, password
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -262,6 +282,7 @@ public class Verify{
     	String SQL = "SELECT * FROM user WHERE email='" + email +"'";
     	ResultSet rs = null;
     	
+    	//boolean r = false;
 		try {
 			rs = stmt.executeQuery(SQL);
 		} catch (SQLException e) {
