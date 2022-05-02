@@ -12,14 +12,14 @@ import java.util.*;
 
 
 public class Comment{
-	User fromUser;
+	//User fromUser; not yet defined
 	String comment;
 
 	
 	
-	public void Comment(User user, String comment){
+	public void Comment(/*User user, */String comment){
 		this.comment = comment;
-		this.fromUser = user;
+		//this.fromUser = user;
 		
 	}
 	

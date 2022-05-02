@@ -4,6 +4,7 @@
 String error = (String) request.getAttribute("error");
 Boolean errd = (error != null);
 String users = (String) request.getAttribute("users");
+String info = (String) request.getAttribute("info");
  %>
 <!DOCTYPE html>
 <html>
@@ -33,6 +34,7 @@ String users = (String) request.getAttribute("users");
  <%= error %>
  <%} %>
  <%= users %>
+ <%= info %>
  </div>
 </body>
 </html>

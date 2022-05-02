@@ -20,6 +20,6 @@ public class Profile{
 	public void Profile(String name, String github, String company_name){
 		this.name = name;
 		this.github = github;
-		this.company_name = company_name
+		this.company_name = company_name;
 	}
 }

@@ -10,7 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+import javax.servlet.http.HttpSession;
 
 import Util.Constant;
 
@@ -26,6 +26,16 @@ public class GetAllUsers extends HttpServlet {
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String sql = "SELECT user_id, passkey, email, profile_id FROM user";
+		HttpSession session = request.getSession(false);
+		String res = "";
+		if(session!= null)
+		{
+			int user_id_ = (int)session.getAttribute("user_id");
+		    int profile_id_ = (int)session.getAttribute("profile_id");
+		    String email_ = (String)session.getAttribute("email");
+		    String name_ = (String)session.getAttribute("name");
+		    res =  name_ + "(" + email_ + ") has user_id " + Integer.toString(user_id_) + " and profile_id " + Integer.toString(profile_id_);
+		}
 		try
     	{
     		Class.forName("com.mysql.jdbc.Driver").newInstance();
@@ -51,11 +61,12 @@ public class GetAllUsers extends HttpServlet {
     				String email = rs.getString(3);
     				String profile_id = Integer.toString(rs.getInt(4));
     				String user = user_id + ", " + passkey + ", " + email + ", " + profile_id + "<br/>";
-    				System.out.println(user);
+    				//System.out.println(user);
     				users += user;
     			}
     		}
     		request.setAttribute("users", users);
+    		request.setAttribute("info", res);
     		request.getRequestDispatcher("/users.jsp").include(request, response);
     			
     	} catch(SQLException e)

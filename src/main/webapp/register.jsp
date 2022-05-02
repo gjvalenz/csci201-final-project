@@ -2,9 +2,7 @@
 <html>
   <head>
     <title>Register</title>
-    <!--  for later
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-     -->
     <style>
       body {
         height: 600px;
@@ -64,7 +62,7 @@
         </div>>
     </div>
     <!--  change this to do a call via ajax so we don't actually need to do form[POST] -->
-    <form class="register" action="./api/user/register" method="post">
+    <form class="register" id="register-modal">
         <div class="email">
             <label for="email">Email:</label>
             <input name="email" type="text" id="email" required pattern="^(.+)@(.+)$" >
@@ -92,4 +90,41 @@
         <button type="submit">Register</button>
     </form>
   </body>
+  <script>
+  // https://stackoverflow.com/questions/11338774/serialize-form-data-to-json
+  function getFormData($form){
+	    var unindexed_array = $form.serializeArray();
+	    var indexed_array = {};
+
+	    $.map(unindexed_array, function(n, i){
+	        indexed_array[n['name']] = n['value'];
+	    });
+
+	    return indexed_array;
+	}
+  $('#register-modal').submit(function(e)
+  {
+	  e.preventDefault();
+	  var dt = getFormData($(this));
+	  $.post('./api/user/register', dt, function(data){
+		  	 if(data.success)
+		  	 {
+		  		 alert("Success! token is " + data.user);
+		  	  }
+		  	 else
+		     {
+		  		 alert("Error: " + data.error);
+		     }
+			 //alert(JSON.stringify(data));
+			 //alert("success!");
+		 });
+  });
+  function submit()
+  {
+	 $.post('./api/user/register', $("#register-modal").seralize(), function(data){
+		 alert(data);
+		 alert("success!");
+	 });
+  }
+  </script>
 </html>

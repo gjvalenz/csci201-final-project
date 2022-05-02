@@ -12,7 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+import javax.servlet.http.HttpSession;
 
 import Util.Constant;
 
@@ -34,20 +34,20 @@ public class Register extends HttpServlet {
     	return false;
     }
     
-    public String JsonResponse(String error, Boolean success, int id)
+    public String JsonResponse(String error, Boolean success, String id)
     {
-    	return String.format("{ \"error\": \"%s\", \"success\": %b, \"user\": %d}", error, success, id);
+    	return String.format("{ \"error\": \"%s\", \"success\": %b, \"user\": \"%s\"}", error, success, id);
     	
     }
     
-    public String JsonResponse(Boolean success, int id)
+    public String JsonResponse(Boolean success, String id)
     {
     	return JsonResponse("", true, id);
     }
     
     public String JsonResponse(String error)
     {
-    	return JsonResponse(error, false, -1);
+    	return JsonResponse(error, false, "-1");
     }
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -125,7 +125,13 @@ public class Register extends HttpServlet {
         	    		return;
     				}
     				int user_id = r2.getInt(1);
-    				out.print(JsonResponse(true, user_id));
+    				HttpSession session=request.getSession();
+    				session.setAttribute("user_id", user_id);
+    				session.setAttribute("profile_id", profile_id);
+    				session.setAttribute("email", email);
+    				session.setAttribute("name", name);
+    				session.setAttribute("github", github);
+    				out.print(JsonResponse(true, session.getId()));
     				out.flush();
     				return;
     			}
