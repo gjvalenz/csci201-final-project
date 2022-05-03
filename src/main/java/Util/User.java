@@ -103,6 +103,6 @@ public class User extends Profile{
 	
 	public String getCompany() {
 		return this.company_name;
-	}
+	} 
 	
 }
