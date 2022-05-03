@@ -2,6 +2,7 @@
 <html>
   <head>
     <title>Login</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <style>
       body {
         height: 600px;
@@ -60,16 +61,48 @@
             <button onclick="window.location.href='register.jsp';">Register A New Account</button>
         </div>
     </div>
-    <form class="login" action="" method="post">
+    <form class="login" id="login-modal">
         <div class="email">
             <label for="email">Email:</label>
-            <input type="text" id="password">
+            <input name="email" type="text" id="email">
         </div>
         <div class="password">
             <label for="password">Password:</label>
-            <input type="text" id="password">
+            <input name="password" type="text" id="password">
         </div>
         <button type="submit">Login</button>
     </form>
+    <script>
+    // https://stackoverflow.com/questions/11338774/serialize-form-data-to-json
+    function getFormData($form){
+  	    var unindexed_array = $form.serializeArray();
+  	    var indexed_array = {};
+
+  	    $.map(unindexed_array, function(n, i){
+  	        indexed_array[n['name']] = n['value'];
+  	    });
+
+  	    return indexed_array;
+  	}
+    $('#login-modal').submit(function(e)
+    {
+  	  e.preventDefault();
+  	  var dt = getFormData($(this));
+  	  console.log(dt);
+  	  $.post('./api/user/login', dt, function(data){
+  		  	 if(data.success)
+  		  	 {
+  		  		 alert("Success! token is " + data.user);
+  		  		 document.cookie = "user=" + data.user + ";"; // how we can tell if user is logged in :)
+  		  	  }
+  		  	 else
+  		     {
+  		  		 alert("Error: " + data.error);
+  		     }
+  			 //alert(JSON.stringify(data));
+  			 //alert("success!");
+  		 });
+    });
+    </script>
   </body>
 </html>

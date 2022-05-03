@@ -63,8 +63,8 @@ public class Login extends HttpServlet {
     		return;
 		}
 		/* example on how to use database*/
-		String sql = "SELECT user_id, profile_id, name, github FROM user where email = ? and password = ?";
-		//String sql2 = String.format("INSERT INTO profile_info(name, github_profile, company_name) VALUES('%s', '%s', '%s')", name, github, company);
+		String sql = "SELECT user_id, profile_id FROM user where email = ? and passkey = ?";
+		String sql2 = "SELECT name, github_profile from profile_info where profile_id = ?";
 		try
     	{
     		Class.forName("com.mysql.jdbc.Driver").newInstance();
@@ -87,18 +87,49 @@ public class Login extends HttpServlet {
     			{
     				int user_id = rs.getInt(1);
     				int profile_id = rs.getInt(2);
-    				String name = rs.getString(3);
-    				String github = rs.getString(4);
- 
-    				HttpSession session=request.getSession();
-    				session.setAttribute("user_id", user_id);
-    				session.setAttribute("profile_id", profile_id);
-    				session.setAttribute("email", email);
-    				session.setAttribute("name", name);
-    				session.setAttribute("github", github);
-    				out.print(JsonResponse(true, session.getId()));
-    				out.flush();
-    				return;
+    				try(PreparedStatement st = conn.prepareStatement(sql2);)
+    				{
+    					st.setInt(1, profile_id);
+    					ResultSet r = st.executeQuery();
+    					if(r.next())
+    					{
+    						if(!r.wasNull())
+    						{
+    							String name = r.getString(1);
+    		    				String github = rs.getString(2);
+    		 
+    		    				HttpSession session=request.getSession();
+    		    				session.setAttribute("user_id", user_id);
+    		    				session.setAttribute("profile_id", profile_id);
+    		    				session.setAttribute("email", email);
+    		    				session.setAttribute("name", name);
+    		    				session.setAttribute("github", github);
+    		    				
+    		    				out.print(JsonResponse(true, session.getId()));
+    		    				out.flush();
+    		    				return;
+    						}
+    						else
+        					{
+        						out.print(JsonResponse("Could not find valid profile."));
+        	    				out.flush();
+        	    				return;
+        					}
+    					}
+    					else
+    					{
+    						out.print(JsonResponse("Could not find valid profile."));
+    	    				out.flush();
+    	    				return;
+    					}
+    				}catch(SQLException e)
+    				{
+    					System.err.println(e.getMessage());
+    					e.printStackTrace();
+    					out.print(JsonResponse("SQL error when accessing profile."));
+    					out.flush();
+        				return;
+    				}
     			}
     			else
     			{

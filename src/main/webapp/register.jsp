@@ -110,6 +110,7 @@
 		  	 if(data.success)
 		  	 {
 		  		 alert("Success! token is " + data.user);
+		  		 document.cookie = "user=" + data.user + ";";
 		  	  }
 		  	 else
 		     {
