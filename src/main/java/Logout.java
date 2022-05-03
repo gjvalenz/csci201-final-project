@@ -18,9 +18,9 @@ public class Logout extends HttpServlet {
 		
 	}
 	
-    public String JsonResponse(Boolean success)
+    public String JsonResponse(Boolean success, String error)
     {
-    	return String.format("{ \"success\": %b }", success);
+    	return String.format("{ \"success\": %b, \"error\": \"%s\" }", success, error);
     	
     }
     
@@ -34,8 +34,10 @@ public class Logout extends HttpServlet {
 		if(session != null)
 		{
 			session.invalidate();
+			out.print(JsonResponse(true, ""));
 		}
-		out.print(JsonResponse(true));
+		else
+			out.print(JsonResponse(true, "No user logged in with this session."));
 		out.flush();
 		return;
 	}
