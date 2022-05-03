@@ -79,7 +79,7 @@ public class GetProfile {
 			e.printStackTrace();
 		}
         //TODO get list of business based on the param
-        return profiles;
+        return profiles; 
 
     }
 }
