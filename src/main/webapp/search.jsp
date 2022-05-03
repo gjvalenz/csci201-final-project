@@ -5,17 +5,18 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home page</title>
+    <title>Search page</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Roboto:wght@300&display=swap"
         rel="stylesheet">
     <script src="https://kit.fontawesome.com/3204349982.js" crossorigin="anonymous"></script>
-     <% //TODO iterate the cookie and check if user registered 
-     	 Boolean logout;
-     	 session = request.getSession(false);
-	     String user = (String)session.getAttribute("name");
+    <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
+    <%@ page import ="Util.User" %>
+    <%@ page import ="java.util.*" %>
+     <% 
+     	ArrayList<User> profiles = (ArrayList<User>)request.getAttribute("results");
      %>
         
     <style>
@@ -26,7 +27,6 @@
     #main {
     	text-align:center;
     }
-
     #logo {
     	font-family:"Lobster", serif;
     	color:red;
@@ -106,87 +106,18 @@
     </style>
 </head>
 <body>
-    <div id="main">
-	   	<ul>
-		   	<div>
-		   		<li><a id = "logo" href="home.jsp">GigHub</a></li>
-		   
-		   	</div >
-		   	<p style="text-align:left; margin-left: 15px; margin-right: 1080px; color:gray;"><%if(user != null) {
-			     	out.println("Hi " + user +"!");
-			     } %></p>
-		   	<div id="nav">
-		   		<li><a class = "other" href="home.jsp">Home</a></li>
-			    <li><a class = "other" href="login.jsp">
-			    <% if(user != null) {
-			    	out.println("Logout");
-			    	logout = true;
-			    	}
-			    	else {
-			    		out.println("Login/Register");
-			    		logout= false;
-			    	}%>
-			    </a></li>
-		   	</div>
-		</ul>
-	 
-	    <hr></hr>
-	    
-	    <form action="search.jsp" method="GET">
-		 	<div>
-		 		<!-- <select name="category" >
-					<option>Category</option>
-					<option>Restaurant Name</option>
-				</select> -->
-				<input id="searchbar" type="text" placeholder="american">
-				<button type="submit" id="redbutton"><i class="fa fa-search"></i></button>
-	
-				<input type="radio" name="location" id="la" value="Los Angeles">
-				<label class="rad" for="la"> Name </label>
-	
-				<input type="radio" name="location" id="sf" value="San Francisco">
-				<label class="rad" for="sf"> Profession </label>
-				<br/>
-		 	</div>
-		 	<div id="ratings">
-				<input type="radio" name="location" value="College Park">
-				<label class="rad" id = "rating" for="cp"> Company </label>
-	    	</div>
-	    </form>
-	    <h2 style="color:gray; text-align:left;">Results for b in category</h2>
-	    <hr></hr>
-	    <div id="cont">
-	    	<div id="pic"><img id="spec" src="first.png"></div>
-	    	<div id="contt" style="margin-left:15px;">
-		    	<a href="details.jsp">Benu</a>
-	    		<p style="color:gray;">Price: $$$$</p>
-	    		<p style="color:gray;">Review Count: 1102</p>
-	    		<p style="color:gray;">Rating: <img id="star" src="star.png"><img id="star" src="star.png"><img id="star" src="star.png"><img id="star" src="star.png"></p>
-	    		<p style="color:gray;">Yelp link</p>
-		    </div>
-	    </div>
-	    <hr></hr>
-	    <div id="cont">
-	    	<div id="pic"><img id="spec" src="second.png"></div>
-	    	<div id="contt" style="margin-left:15px;">
-		    	<a href="details.jsp">House of Prime Rib</a>
-	    		<p style="color:gray;">Price: $$$</p>
-	    		<p style="color:gray;">Review Count: 7680</p>
-	    		<p style="color:gray;">Rating: <img id="star" src="star.png"><img id="star" src="star.png"><img id="star" src="star.png"><img id="star" src="star.png"></p>
-	    		<p style="color:gray;">Yelp link</p>
-		    </div>
-	    </div>
-	    <hr></hr>
-	    <div id="cont">
-	    	<div id="pic"><img id="spec" src="third.png"></div>
-	    	<div id="contt" style="margin-left:15px;">
-	    		<a href="details.jsp">Brenda's French Soul Food</a>
-	    		<p style="color:gray;">Price: $$</p>
-	    		<p style="color:gray;">Review Count: 11348</p>
-	    		<p style="color:gray;">Rating: <img id="star" src="star.png"><img id="star" src="star.png"><img id="star" src="star.png"><img id="star" src="star.png"></p>
-	    		<p style="color:gray;">Yelp link</p>
-		    </div>
-	    </div>
-    </div>
+    <div>
+	<% if(profiles.size() == 0) {%>
+	<p style = "padding: 20px">Sorry, there are no profiles that meet your search filters</p>
+	<% } else { %>
+		<c:forEach var = "profile" items = "${profiles}">
+		<div style = "border-bottom: 1px solid #E2E2E2">
+		<div style = "margin-left: 30px; padding-top: 10px">
+		<a href = "ProfileDispatcher?email=${profile.getEmail()}" >${profile.getName()}</a><br>
+		</div>
+		</div>
+		</c:forEach>
+	<% } %>
+	</div>
 </body>
 </html>
