@@ -107,4 +107,8 @@ public class User extends Profile{
 		return this.company_name;
 	} 
 	
+	public String getEmail(){
+		return this.email;
+	}
+	
 }

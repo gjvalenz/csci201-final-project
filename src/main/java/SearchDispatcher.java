@@ -50,7 +50,7 @@ public class SearchDispatcher extends HttpServlet {
     	
     	searchType = "name"; //default
     	
-    	keyWord = request.getParameter("keyWord");
+    	keyWord = request.getParameter("searchbar");
     	
     	
     	
@@ -66,17 +66,17 @@ public class SearchDispatcher extends HttpServlet {
     	
     	ArrayList<User> profiles = GetProfile.getProfiles(keyWord, searchType);
     	
-    	Profile[] profile = profiles.toArray(new Profile[profiles.size()]);
+    	//Profile[] profile = profiles.toArray(new Profile[profiles.size()]);
     	
     	request.setAttribute("results", profiles);
     	
-    	//request.setAttribute("keyWord_", keyWord);
-    	//request.setAttribute("searchType_", searchType);
+    	request.setAttribute("keyWord_", keyWord);
+    	request.setAttribute("searchType_", searchType);
     	
  
     	
     	
-    	RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/search.jsp");
+    	RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/search2.jsp");
     	dispatcher.forward(request, response);
     	
     
