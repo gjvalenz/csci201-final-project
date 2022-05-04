@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import Util.*;
+//import Util.*;
 
 public class GetProfile {
 	
@@ -63,9 +63,15 @@ public class GetProfile {
 			e.printStackTrace();
 		}
         String sql = "SELECT * FROM user INNER JOIN profile_info ON user.profile_id = profile_info.profile_id";
-        if(!keyWord.equals("")) {
+        if(!keyWord.equals("") && searchType.equals("name")) {
+        	
         	sql += " WHERE profile_info.name LIKE '%" + keyWord + "%'";
         } 
+        else if(!keyWord.equals("") && searchType.equals("company")) {
+        	
+        	sql += " WHERE profile_info.company_name LIKE '%" + keyWord + "%'";
+        }
+  
         sql += ";";
         ArrayList<User> profiles = new ArrayList<User>();
         try {
