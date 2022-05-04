@@ -42,8 +42,11 @@ public class ProfileDispatcher extends HttpServlet {
 		PrintWriter out = response.getWriter();
     	String email = request.getParameter("email");
 		User profile = GetProfile.getProfile(email);  //Get Profile from Search
-		request.setAttribute("profile", profile);
-		RequestDispatcher requestdispatcher = getServletContext().getRequestDispatcher("/profile.jsp");
+		request.setAttribute("name", profile.getName());
+		request.setAttribute("email", profile.getEmail());
+		request.setAttribute("github", profile.getGithub());
+		request.setAttribute("company", profile.getCompany());
+		RequestDispatcher requestdispatcher = getServletContext().getRequestDispatcher("/Profile.jsp");
 		requestdispatcher.forward(request, response);
 		
     }
