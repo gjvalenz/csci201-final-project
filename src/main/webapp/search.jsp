@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <!DOCTYPE html>
 <html>
   <head>
@@ -42,6 +41,7 @@
 		.box input {
 	     height: 50px;
 	     width: 800px;
+	     border-radius: 5px;
 	}
 		.borderless td, .borderless th {border: none;}
 		

@@ -79,7 +79,7 @@
         </a>
         <div class="loginredirect">
             <button onclick="window.location.href='login.jsp';">Login To An Existing Account</button>
-        </div>>
+        </div>
     </div>
     <!--  change this to do a call via ajax so we don't actually need to do form[POST] -->
    
