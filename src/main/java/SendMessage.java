@@ -12,7 +12,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serial;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -20,11 +22,7 @@ import java.sql.Statement;
 /**
  * Servlet implementation class LogoutDispatcher
  */
-@WebServlet(
-		urlPatterns= { "/api/message/send" },
-		initParams= {
-				@WebInitParam(name="id", value="-1")
-		})
+@WebServlet("/api/message/send")
 public class SendMessage extends HttpServlet {
     @Serial
     private static final long serialVersionUID = 1L;
@@ -55,9 +53,8 @@ public class SendMessage extends HttpServlet {
     	PrintWriter out = response.getWriter();
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
-    	String p1 = request.getParameter("id");
+    	String p1 = request.getParameter("userID");
     	String mmessage = request.getParameter("message");
-		String email = request.getParameter("email");
     	int uto = Integer.parseInt(p1);
     	if(uto == -1)
     	{
@@ -73,12 +70,21 @@ public class SendMessage extends HttpServlet {
 			{
 				String ctime = Constant.sdf.format(new java.util.Date());
 				String cstatus = "S";
-    			String sql = String.format("INSERT INTO messages(ufrom, uto, mmessage, cstatus, ctime) VALUES(%d, %d, '%s', '%s', '%s')", ufrom, uto, mmessage, cstatus, ctime);
+    			String sql ="INSERT INTO message(ufrom, uto, mmessage, cstatus, ctime) VALUES(?, ?, ?, ?, ?)";
     			try(
     	    			Connection conn = DriverManager.getConnection(Constant.DBURL, Constant.DBUserName, Constant.DBPassword);
-    	    			Statement stmt = conn.createStatement();)
+    	    			PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);)
     	    	{
-    				stmt.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
+    				stmt.setInt(1, ufrom);
+    				stmt.setInt(2, uto);
+    				stmt.setString(3, mmessage);
+    				stmt.setString(4, cstatus);
+    				long time = System.currentTimeMillis();
+    				String date = Constant.sdf.format(new Date(time));
+    				System.out.println(date);
+    				//System.out.println(new Date(time).getTime());
+    				stmt.setString(5, date);
+    				stmt.executeUpdate();
         			ResultSet rs = stmt.getGeneratedKeys();
         			if(rs.next())
         			{

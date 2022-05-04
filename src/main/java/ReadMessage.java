@@ -20,11 +20,7 @@ import java.sql.Statement;
 /**
  * Servlet implementation class LogoutDispatcher
  */
-@WebServlet(
-		urlPatterns= { "/api/message/read" },
-		initParams= {
-				@WebInitParam(name="id", value="-1")
-		})
+@WebServlet("/api/message/read")
 public class ReadMessage extends HttpServlet {
     @Serial
     private static final long serialVersionUID = 1L;
@@ -55,7 +51,7 @@ public class ReadMessage extends HttpServlet {
     	PrintWriter out = response.getWriter();
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
-    	String p1 = request.getParameter("id");
+    	String p1 = request.getParameter("messageID");
     	int message_id = Integer.parseInt(p1);
     	if(message_id == -1)
     	{
@@ -71,7 +67,7 @@ public class ReadMessage extends HttpServlet {
 			{
 				String ctime = Constant.sdf.format(new java.util.Date());
 				String cstatus = "S";
-    			String sql = String.format("UPDATE messages SET cstatus='%s' WHERE message_id=%d", "R", message_id);
+    			String sql = String.format("UPDATE message SET cstatus='%s' WHERE message_id=%d", "R", message_id);
     			try(
     	    			Connection conn = DriverManager.getConnection(Constant.DBURL, Constant.DBUserName, Constant.DBPassword);
     	    			Statement stmt = conn.createStatement();)
