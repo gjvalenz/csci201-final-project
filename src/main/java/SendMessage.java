@@ -68,7 +68,7 @@ public class SendMessage extends HttpServlet {
 			int ufrom = (int)session.getAttribute("user_id");
 			if(ufrom != -1) // valid user
 			{
-				String ctime = Constant.sdf.format(new java.util.Date());
+				//String ctime = Constant.sdf.format(new java.util.Date());
 				String cstatus = "S";
     			String sql ="INSERT INTO message(ufrom, uto, mmessage, cstatus, ctime) VALUES(?, ?, ?, ?, ?)";
     			try(

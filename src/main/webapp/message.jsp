@@ -36,16 +36,20 @@ String messages = (String) request.getAttribute("messages");
  <%} else {%>
  Hello, <%= name %>(<%= user_id %>)
  <div>
- 	<input type="text" name="message" id="message" />
+ 	Message:<input type="text" name="message" id="message" />
+ 	To:<input type="text" id="whom" />
  	<button id="send-message">Send</button>
  </div>
  <% } %>
  <%= messages %>
+ <button id="get-messages">Get Messages</button>
+ <div id="messages"></div>
+ <button id="check-new-messages">Check New Messages</button>
+ <div id="new-messages"></div>
  </div>
  <script>
  $('#send-message').click(function(){
-	 console.log($('#message').val());
-	 $.post('./api/message/send', {message: $('#message').val(), userID: 1}, function(data){
+	 $.post('./api/message/send', {message: $('#message').val(), userID: parseInt($('#whom').val())}, function(data){
 	  	 if(data.success)
 	  	 {
 	  		 alert("Success! Message id is " + data.messageID);
@@ -54,9 +58,34 @@ String messages = (String) request.getAttribute("messages");
 	     {
 	  		 alert("Error: " + data.error);
 	     }
-		 //alert(JSON.stringify(data));
-		 //alert("success!");
 	 });
+ });
+ 
+ $("#get-messages").click(function(){
+	 $.get('./api/messages/received', function(data){
+	  	 if(data.success)
+	  	 {
+	  		$("#messages").text(JSON.stringify(data.messages));
+	  	  }
+	  	 else
+	     {
+	  		 alert("Error: " + data.error);
+	     }
+	 }); 
+ });
+ 
+ $("#check-new-messages").click(function(){
+	// 20 second buffer
+	$.get('./api/messages/new', {time: Date.now() - 1000*20}, function(data){
+	  	 if(data.success)
+	  	 {
+	  		$("#new-messages").text(JSON.stringify(data.messages));
+	  	  }
+	  	 else
+	     {
+	  		 alert("Error: " + data.error);
+	     }
+	});
  });
  </script>
 </body>
