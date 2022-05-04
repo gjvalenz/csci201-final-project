@@ -53,30 +53,26 @@ public class SearchDispatcher extends HttpServlet {
     	keyWord = request.getParameter("searchbar");
     	
     	
+    	String category = request.getParameter("category");
     	
-    	if(request.getParameter("categories")=="") {
-    		searchType = "name"; //default
-    	}
-    	else{
-    		searchType = request.getParameter("categories");
-    	}
     	
     	
     	GetProfile getProfile = new GetProfile();
     	
-    	ArrayList<User> profiles = GetProfile.getProfiles(keyWord, searchType);
+    	ArrayList<User> profiles = GetProfile.getProfiles(keyWord, category);
     	
     	//Profile[] profile = profiles.toArray(new Profile[profiles.size()]);
     	
     	request.setAttribute("results", profiles);
     	
     	request.setAttribute("keyWord_", keyWord);
-    	request.setAttribute("searchType_", searchType);
+    	//request.setAttribute("searchType_", searchType);
+    	request.setAttribute("searchType", category);
     	
  
     	
     	
-    	RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/search2.jsp");
+    	RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/search.jsp");
     	dispatcher.forward(request, response);
     	
     
