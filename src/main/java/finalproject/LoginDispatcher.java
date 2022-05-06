@@ -1,5 +1,6 @@
 package finalproject;
 
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
@@ -12,7 +13,9 @@ import java.sql.SQLException;
 import java.util.Set;
 import java.io.PrintWriter;
 
-import javax.servlet.http.HttpSession; 
+import javax.servlet.http.HttpSession;
+
+import org.apache.jasper.tagplugins.jstl.core.Out; 
 
 
 
@@ -86,12 +89,26 @@ public class LoginDispatcher extends HttpServlet {
     		cookie.setDomain("http://localhost:8080/gighub"); //XXX
 			
 			
+    		//login httpsession
+    		
+    		 HttpSession session=request.getSession();  
+    		 
+    		        
+    		 String helloUser = null;
+			try {
+				helloUser = Verify.getUserName(email);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
-    		request.setAttribute("HelloUser", "Hi, "+name+"!");
+    		session.setAttribute("HelloUser", "Hello, " + helloUser);
     		
     		request.setAttribute("Logout", "Logout");
     		
-    		response.sendRedirect("index.jsp");
+    		response.sendRedirect("index3.jsp");
+    		
+    		
     		
     		
     	}
