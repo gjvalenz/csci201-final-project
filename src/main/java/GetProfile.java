@@ -90,4 +90,88 @@ public class GetProfile {
         return profiles; 
 
     }
+	
+	public static ArrayList<User> getFriends(String email) {
+        Connection conn = null;
+    	Statement st = null;
+		ResultSet rs = null;
+        try {
+        	Class.forName("com.mysql.cj.jdbc.Driver");
+            conn = DriverManager.getConnection(Constant.DBURL, Constant.DBUserName, Constant.DBPassword);
+        	st = conn.createStatement();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        String sql = "SELECT * FROM friend WHERE friend1 = '" + email + "';";
+        ArrayList<String> friendEmails = new ArrayList<String>();
+        try {
+			rs = st.executeQuery(sql);
+			while(rs.next()) {
+				friendEmails.add(rs.getString("friend2"));
+			} 
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        ArrayList<User> friends = new ArrayList<User>();
+        try {
+        	for(String user: friendEmails) {
+        		sql = "SELECT * FROM user INNER JOIN profile_info ON user.profile_id = profile_info.profile_id WHERE user.email = '" + user + "';";
+        		ResultSet rs2 = st.executeQuery(sql);
+        		User friend = new User(rs2.getString("passkey"), rs2.getString("email"), rs2.getString("name"), rs2.getString("github_profile"), rs2.getString("company_name"));
+				friends.add(friend);
+        	}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        //TODO get list of business based on the param
+        return friends; 
+
+    }
+    
+    public static ArrayList<User> getFriendRequests(String email) {
+        Connection conn = null;
+    	Statement st = null;
+		ResultSet rs = null;
+        try {
+        	Class.forName("com.mysql.cj.jdbc.Driver");
+            conn = DriverManager.getConnection(Constant.DBURL, Constant.DBUserName, Constant.DBPassword);
+        	st = conn.createStatement();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        String sql = "SELECT * FROM friend_request WHERE ufto = '" + email + "';";
+        ArrayList<String> friendEmails = new ArrayList<String>();
+        try {
+			rs = st.executeQuery(sql);
+			while(rs.next()) {
+				friendEmails.add(rs.getString("uffrom"));
+			} 
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        ArrayList<User> friendRequests = new ArrayList<User>();
+        try {
+        	for(String user: friendEmails) {
+        		sql = "SELECT * FROM user INNER JOIN profile_info ON user.profile_id = profile_info.profile_id WHERE user.email = '" + user + "';";
+        		ResultSet rs2 = st.executeQuery(sql);
+        		User friendRequest = new User(rs2.getString("passkey"), rs2.getString("email"), rs2.getString("name"), rs2.getString("github_profile"), rs2.getString("company_name"));
+				friendRequests.add(friendRequest);
+        	}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        //TODO get list of business based on the param
+        return friendRequests; 
+
+    }
 }
