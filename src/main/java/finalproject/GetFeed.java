@@ -24,8 +24,8 @@ import java.util.ArrayList;
 /**
  * Servlet implementation class LogoutDispatcher
  */
-@WebServlet("/api/posts")
-public class GetPosts extends HttpServlet {
+@WebServlet("/api/feed")
+public class GetFeed extends HttpServlet {
     @Serial
     private static final long serialVersionUID = 1L;
     
@@ -42,7 +42,7 @@ public class GetPosts extends HttpServlet {
     
     public String JsonResponse(String error, Boolean success, ArrayList<Post> posts)
     {
-    	return String.format("{ \"error\": \"%s\", \"success\": %b, \"posts\": %s }", error, success, asJSONArray(posts));
+    	return String.format("{ \"error\": \"%s\", \"success\": %b, \"feed\": %s }", error, success, asJSONArray(posts));
     	
     }
     
@@ -82,11 +82,12 @@ public class GetPosts extends HttpServlet {
 			out.flush();
     		return;
     	}
-		if(session != null)
+		if(session != null && request.isRequestedSessionIdValid())
 		{
-			int user_id = (int)session.getAttribute("user_id");
-			if(user_id != -1) // valid user
+			System.out.println("valid session??");
+			if(session.getAttribute("user_id") != null) // valid user
 			{
+				int user_id = (int)session.getAttribute("user_id");
 		    	ArrayList<Integer> friends = (ArrayList<Integer>) session.getAttribute("friends");
 		    	String list = "";
 		    	if(friends != null)
@@ -142,6 +143,7 @@ public class GetPosts extends HttpServlet {
     						posts.add(new Post(post_id, body, time, likes_count, post_user, liked));
     					}
     				}
+    				posts.sort((Post p1, Post p2) -> p2.time.compareTo(p1.time));
     				out.print(JsonResponse(true, posts));
     				out.flush();
     				return;
@@ -163,11 +165,56 @@ public class GetPosts extends HttpServlet {
 				return;
 			}
 		}
-		else
+		else // not logged in, send feed
 		{
-			out.print(JsonResponse("No user logged in with this session."));
-			out.flush();
-			return;
+			String sql = "SELECT post_id, body, puser, ctime FROM post LIMIT 50";
+			String sql2 = "SELECT COUNT(*), SUM(CASE WHEN post_id = ? THEN 1 ELSE 0 END) as LikeCount FROM post_like";
+			try(
+	    			Connection conn = DriverManager.getConnection(Constant.DBURL, Constant.DBUserName, Constant.DBPassword);
+	    			PreparedStatement stmt = conn.prepareStatement(sql);)
+	    	{
+				ArrayList<Post> posts = new ArrayList<Post>();
+				ResultSet rs = stmt.executeQuery();
+				while(rs.next())
+				{
+					if(!rs.wasNull())
+					{
+						int post_id = rs.getInt(1);
+						String body = rs.getString(2);
+						String time = rs.getString(4);
+						int post_user = rs.getInt(3);
+						Boolean liked = false;
+						int likes_count = 0;
+						PreparedStatement stmt2 = conn.prepareStatement(sql2);
+						stmt2.setInt(1, post_id);
+						ResultSet rs2 = stmt2.executeQuery();
+						if(rs2.next())
+						{
+							if(!rs2.wasNull())
+							{
+								int total = rs2.getInt(1);
+								int likes = rs2.getInt(2);
+								System.out.println("total: " + total);
+								System.out.println("likes: " + likes);
+								likes_count = likes;
+							}
+						}
+						posts.add(new Post(post_id, body, time, likes_count, post_user, liked));
+					}
+				}
+				posts.sort((Post p1, Post p2) -> p2.time.compareTo(p1.time));
+				out.print(JsonResponse(true, posts));
+				out.flush();
+				return;
+	    	}
+			catch(SQLException e)
+			{
+				System.err.println(e.getMessage());
+				e.printStackTrace();
+				out.print(JsonResponse("SQL error."));
+				out.flush();
+				return;
+			}
 		}
     }
 

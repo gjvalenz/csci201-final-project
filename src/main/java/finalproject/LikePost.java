@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serial;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -24,25 +23,25 @@ import java.sql.Statement;
 /**
  * Servlet implementation class LogoutDispatcher
  */
-@WebServlet("/api/message/send")
-public class SendMessage extends HttpServlet {
+@WebServlet("/api/post/like")
+public class LikePost extends HttpServlet {
     @Serial
     private static final long serialVersionUID = 1L;
     
-    public String JsonResponse(String error, Boolean success, int id)
+    public String JsonResponse(String error, Boolean success)
     {
-    	return String.format("{ \"error\": \"%s\", \"success\": %b, \"messageID\": %d }", error, success, id);
+    	return String.format("{ \"error\": \"%s\", \"success\": %b }", error, success);
     	
     }
     
-    public String JsonResponse(Boolean success, int id)
+    public String JsonResponse(Boolean success)
     {
-    	return JsonResponse("", true, id);
+    	return JsonResponse("", true);
     }
     
     public String JsonResponse(String error)
     {
-    	return JsonResponse(error, false, -1);
+    	return JsonResponse(error, false);
     }
 
     /**
@@ -55,16 +54,21 @@ public class SendMessage extends HttpServlet {
     	PrintWriter out = response.getWriter();
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
-    	String p1 = request.getParameter("userID");
-    	String mmessage = request.getParameter("message");
-    	int uto = Integer.parseInt(p1);
-    	if(uto == -1)
+    	String p1 = request.getParameter("postID");
+    	int post_id = Integer.parseInt(p1);
+    	if(post_id == -1)
     	{
-    		out.print(JsonResponse("No valid message recepient"));
+    		out.print(JsonResponse("Failed to like post"));
     		out.flush();
     		return;
     	}
     	HttpSession session=request.getSession(false);
+    	if(session == null || !request.isRequestedSessionIdValid())
+    	{
+    		out.print(JsonResponse("No user logged in with this session."));
+    		out.flush();
+    		return;
+    	}
     	try
     	{
     		Class.forName("com.mysql.jdbc.Driver").newInstance();
@@ -76,44 +80,34 @@ public class SendMessage extends HttpServlet {
     	}
 		if(session != null)
 		{
-			int ufrom = (int)session.getAttribute("user_id");
-			if(ufrom != -1) // valid user
+			int pluser = (int)session.getAttribute("user_id");
+			if(pluser != -1) // valid user
 			{
-				//String ctime = Constant.sdf.format(new java.util.Date());
-				String cstatus = "S";
-    			String sql ="INSERT INTO message(ufrom, uto, mmessage, cstatus, ctime) VALUES(?, ?, ?, ?, ?)";
+    			String sql = "INSERT INTO post_like(post_id, pluser) VALUES(?, ?)";
     			try(
     	    			Connection conn = DriverManager.getConnection(Constant.DBURL, Constant.DBUserName, Constant.DBPassword);
     	    			PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);)
     	    	{
-    				stmt.setInt(1, ufrom);
-    				stmt.setInt(2, uto);
-    				stmt.setString(3, mmessage);
-    				stmt.setString(4, cstatus);
-    				long time = System.currentTimeMillis();
-    				String date = Constant.sdf.format(new Date(time));
-    				System.out.println(date);
-    				//System.out.println(new Date(time).getTime());
-    				stmt.setString(5, date);
-    				stmt.executeUpdate();
+    				stmt.setInt(1, post_id);
+    				stmt.setInt(2, pluser);
+        			stmt.executeUpdate();
         			ResultSet rs = stmt.getGeneratedKeys();
         			if(rs.next())
         			{
         				if(rs.wasNull())
         				{
-        					out.print(JsonResponse("Could not send message. Please try again."));
+        					out.print(JsonResponse("Could not like post."));
         					out.flush();
             	    		return;
         				}
-        				int message_id = rs.getInt(1);
-        				out.print(JsonResponse(true, message_id));
+        				out.print(JsonResponse(true));
         				out.flush();
         				return;
         			}
         			else
         			{
-        				out.print(JsonResponse("Could not create user"));
-        				out.flush();
+        				out.print(JsonResponse("Could not like post."));
+    					out.flush();
         	    		return;
         			}
     	    	}
@@ -133,12 +127,6 @@ public class SendMessage extends HttpServlet {
 				out.flush();
 				return;
 			}
-		}
-		else
-		{
-			out.print(JsonResponse("No user logged in with this session."));
-			out.flush();
-			return;
 		}
     }
 

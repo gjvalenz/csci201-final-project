@@ -24,14 +24,14 @@ import java.sql.Statement;
 /**
  * Servlet implementation class LogoutDispatcher
  */
-@WebServlet("/api/message/send")
-public class SendMessage extends HttpServlet {
+@WebServlet("/api/post/create")
+public class CreatePost extends HttpServlet {
     @Serial
     private static final long serialVersionUID = 1L;
     
     public String JsonResponse(String error, Boolean success, int id)
     {
-    	return String.format("{ \"error\": \"%s\", \"success\": %b, \"messageID\": %d }", error, success, id);
+    	return String.format("{ \"error\": \"%s\", \"success\": %b, \"postID\": %d }", error, success, id);
     	
     }
     
@@ -55,15 +55,7 @@ public class SendMessage extends HttpServlet {
     	PrintWriter out = response.getWriter();
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
-    	String p1 = request.getParameter("userID");
-    	String mmessage = request.getParameter("message");
-    	int uto = Integer.parseInt(p1);
-    	if(uto == -1)
-    	{
-    		out.print(JsonResponse("No valid message recepient"));
-    		out.flush();
-    		return;
-    	}
+    	String body = request.getParameter("body"); 
     	HttpSession session=request.getSession(false);
     	try
     	{
@@ -76,43 +68,44 @@ public class SendMessage extends HttpServlet {
     	}
 		if(session != null)
 		{
-			int ufrom = (int)session.getAttribute("user_id");
-			if(ufrom != -1) // valid user
+			if(session.getAttribute("user_id") != null) // valid user
 			{
-				//String ctime = Constant.sdf.format(new java.util.Date());
-				String cstatus = "S";
-    			String sql ="INSERT INTO message(ufrom, uto, mmessage, cstatus, ctime) VALUES(?, ?, ?, ?, ?)";
+				int user_id = (int)session.getAttribute("user_id");
+				if(user_id == -1)
+				{
+					session.invalidate();
+					out.print(JsonResponse("Invalid session."));
+					out.flush();
+					return;
+				}
+    			String sql ="INSERT INTO post(body, puser, ctime) VALUES(?, ?, ?)";
     			try(
     	    			Connection conn = DriverManager.getConnection(Constant.DBURL, Constant.DBUserName, Constant.DBPassword);
     	    			PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);)
     	    	{
-    				stmt.setInt(1, ufrom);
-    				stmt.setInt(2, uto);
-    				stmt.setString(3, mmessage);
-    				stmt.setString(4, cstatus);
+    				stmt.setString(1, body);
+    				stmt.setInt(2, user_id);
     				long time = System.currentTimeMillis();
     				String date = Constant.sdf.format(new Date(time));
-    				System.out.println(date);
-    				//System.out.println(new Date(time).getTime());
-    				stmt.setString(5, date);
+    				stmt.setString(3, date);
     				stmt.executeUpdate();
         			ResultSet rs = stmt.getGeneratedKeys();
         			if(rs.next())
         			{
         				if(rs.wasNull())
         				{
-        					out.print(JsonResponse("Could not send message. Please try again."));
+        					out.print(JsonResponse("Could not create post. Please try again."));
         					out.flush();
             	    		return;
         				}
-        				int message_id = rs.getInt(1);
-        				out.print(JsonResponse(true, message_id));
+        				int post_id = rs.getInt(1);
+        				out.print(JsonResponse(true, post_id));
         				out.flush();
         				return;
         			}
         			else
         			{
-        				out.print(JsonResponse("Could not create user"));
+        				out.print(JsonResponse("Could not create post. Please try again."));
         				out.flush();
         	    		return;
         			}
