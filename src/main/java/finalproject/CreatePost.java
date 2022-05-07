@@ -78,7 +78,8 @@ public class CreatePost extends HttpServlet {
 					out.flush();
 					return;
 				}
-    			String sql ="INSERT INTO post(body, puser, ctime) VALUES(?, ?, ?)";
+				String name = (String) session.getAttribute("name");
+    			String sql ="INSERT INTO post(body, puser, ctime, uname, like_count) VALUES(?, ?, ?, ?, ?)";
     			try(
     	    			Connection conn = DriverManager.getConnection(Constant.DBURL, Constant.DBUserName, Constant.DBPassword);
     	    			PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);)
@@ -88,6 +89,8 @@ public class CreatePost extends HttpServlet {
     				long time = System.currentTimeMillis();
     				String date = Constant.sdf.format(new Date(time));
     				stmt.setString(3, date);
+    				stmt.setString(4, name);
+    				stmt.setInt(5, 0);
     				stmt.executeUpdate();
         			ResultSet rs = stmt.getGeneratedKeys();
         			if(rs.next())

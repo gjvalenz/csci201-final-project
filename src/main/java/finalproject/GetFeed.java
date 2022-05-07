@@ -102,10 +102,11 @@ public class GetFeed extends HttpServlet {
 	    			out.flush();
 	    			return;
 		    	}
-				String sql = String.format("SELECT post_id, body, puser, ctime FROM post WHERE puser IN (%s)", list);
+				String sql = String.format("SELECT post_id, body, puser, ctime, uname, like_count FROM post WHERE puser IN (%s)", list);
 				System.out.println(sql);
-				String sql2 = "SELECT COUNT(*), SUM(CASE WHEN post_id = ? THEN 1 ELSE 0 END) as LikeCount, SUM(CASE WHEN post_id = ? AND pluser = ? THEN 1 ELSE 0 END) as Liked FROM post_like";
-    			try(
+				//String sql2 = "SELECT COUNT(*), SUM(CASE WHEN post_id = ? THEN 1 ELSE 0 END) as LikeCount, SUM(CASE WHEN post_id = ? AND pluser = ? THEN 1 ELSE 0 END) as Liked FROM post_like";
+				String sql2 = "SELECT COUNT(*), SUM(CASE WHEN post_id = ? AND pluser = ? THEN 1 ELSE 0 END) as Liked FROM post_like";
+				try(
     	    			Connection conn = DriverManager.getConnection(Constant.DBURL, Constant.DBUserName, Constant.DBPassword);
     	    			PreparedStatement stmt = conn.prepareStatement(sql);)
     	    	{
@@ -119,28 +120,25 @@ public class GetFeed extends HttpServlet {
     						String body = rs.getString(2);
     						String time = rs.getString(4);
     						int post_user = rs.getInt(3);
+    						String name = rs.getString(5);
+    						int like_count = rs.getInt(6);
     						Boolean liked = false;
-    						int likes_count = 0;
     						PreparedStatement stmt2 = conn.prepareStatement(sql2);
     						stmt2.setInt(1, post_id);
-    						stmt2.setInt(2, post_id);
-    						stmt2.setInt(3, user_id);
+    						stmt2.setInt(2, user_id);
     						ResultSet rs2 = stmt2.executeQuery();
     						if(rs2.next())
     						{
     							if(!rs2.wasNull())
     							{
     								int total = rs2.getInt(1);
-    								int likes = rs2.getInt(2);
-    								int did_like = rs2.getInt(3);
+    								int did_like = rs2.getInt(2);
     								System.out.println("total: " + total);
-    								System.out.println("likes: " + likes);
     								System.out.println("did like: " + did_like);
-    								likes_count = likes;
     								liked = did_like > 0;
     							}
     						}
-    						posts.add(new Post(post_id, body, time, likes_count, post_user, liked));
+    						posts.add(new Post(post_id, body, time, name, like_count, post_user, liked));
     					}
     				}
     				posts.sort((Post p1, Post p2) -> p2.time.compareTo(p1.time));
@@ -167,8 +165,7 @@ public class GetFeed extends HttpServlet {
 		}
 		else // not logged in, send feed
 		{
-			String sql = "SELECT post_id, body, puser, ctime FROM post LIMIT 50";
-			String sql2 = "SELECT COUNT(*), SUM(CASE WHEN post_id = ? THEN 1 ELSE 0 END) as LikeCount FROM post_like";
+			String sql = "SELECT post_id, body, puser, ctime, uname, like_count FROM post LIMIT 50";
 			try(
 	    			Connection conn = DriverManager.getConnection(Constant.DBURL, Constant.DBUserName, Constant.DBPassword);
 	    			PreparedStatement stmt = conn.prepareStatement(sql);)
@@ -183,23 +180,10 @@ public class GetFeed extends HttpServlet {
 						String body = rs.getString(2);
 						String time = rs.getString(4);
 						int post_user = rs.getInt(3);
+						String uname = rs.getString(5);
+						int likes_count = rs.getInt(6);
 						Boolean liked = false;
-						int likes_count = 0;
-						PreparedStatement stmt2 = conn.prepareStatement(sql2);
-						stmt2.setInt(1, post_id);
-						ResultSet rs2 = stmt2.executeQuery();
-						if(rs2.next())
-						{
-							if(!rs2.wasNull())
-							{
-								int total = rs2.getInt(1);
-								int likes = rs2.getInt(2);
-								System.out.println("total: " + total);
-								System.out.println("likes: " + likes);
-								likes_count = likes;
-							}
-						}
-						posts.add(new Post(post_id, body, time, likes_count, post_user, liked));
+						posts.add(new Post(post_id, body, time, uname, likes_count, post_user, liked));
 					}
 				}
 				posts.sort((Post p1, Post p2) -> p2.time.compareTo(p1.time));

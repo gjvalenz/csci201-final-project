@@ -49,7 +49,7 @@
  
  function generatePost(post, index)
  {
-	 return "<div class='post' data-index='" + index +"' data-post-id='" + post.post_id + "'><p>" + post.body + "</p><button class='post-like'" + (post.liked ? "disabled":"")+ ">Like</button><p class='post-likes-count'>" + post.likes_count + "</p><p>" + post.time + "</p></div>";
+	 return "<div class='post' data-index='" + index +"' data-post-id='" + post.post_id + "'><h3>" +post.post_user_name + "</h3><p>" + post.body + "</p><button class='post-like'" + (post.liked ? "disabled":"")+ ">Like</button><p class='post-likes-count'>" + post.likes_count + "</p><p>" + post.time + "</p></div>";
  }
  
  function addPosts(posts)

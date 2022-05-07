@@ -23,8 +23,8 @@ import java.sql.Statement;
 /**
  * Servlet implementation class LogoutDispatcher
  */
-@WebServlet("/api/post/like")
-public class LikePost extends HttpServlet {
+@WebServlet("/api/comment/like")
+public class LikeComment extends HttpServlet {
     @Serial
     private static final long serialVersionUID = 1L;
     
@@ -54,11 +54,11 @@ public class LikePost extends HttpServlet {
     	PrintWriter out = response.getWriter();
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
-    	String p1 = request.getParameter("postID");
-    	int post_id = Integer.parseInt(p1);
-    	if(post_id == -1)
+    	String p1 = request.getParameter("commentID");
+    	int comment_id = Integer.parseInt(p1);
+    	if(comment_id == -1)
     	{
-    		out.print(JsonResponse("Failed to like post"));
+    		out.print(JsonResponse("Failed to like comment"));
     		out.flush();
     		return;
     	}
@@ -80,29 +80,29 @@ public class LikePost extends HttpServlet {
     	}
 		if(session != null)
 		{
-			int pluser = (int)session.getAttribute("user_id");
-			if(pluser != -1) // valid user
+			int luser = (int)session.getAttribute("user_id");
+			if(luser != -1) // valid user
 			{
-    			String sql = "INSERT INTO post_like(post_id, pluser) VALUES(?, ?)";
-    			String sql2 = "UPDATE post SET like_count = like_count + 1 WHERE post_id = ?";
+    			String sql = "INSERT INTO comment_like(comment_id, luser) VALUES(?, ?)";
+    			String sql2 = "UPDATE comment SET likes_count = likes_count + 1 WHERE comment_id = ?";
     			try(
     	    			Connection conn = DriverManager.getConnection(Constant.DBURL, Constant.DBUserName, Constant.DBPassword);
     	    			PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);)
     	    	{
-    				stmt.setInt(1, post_id);
-    				stmt.setInt(2, pluser);
+    				stmt.setInt(1, comment_id);
+    				stmt.setInt(2, luser);
         			stmt.executeUpdate();
         			ResultSet rs = stmt.getGeneratedKeys();
         			if(rs.next())
         			{
         				if(rs.wasNull())
         				{
-        					out.print(JsonResponse("Could not like post."));
+        					out.print(JsonResponse("Could not like comment."));
         					out.flush();
             	    		return;
         				}
         				PreparedStatement ps2 = conn.prepareStatement(sql2);
-        				ps2.setInt(1, post_id);
+        				ps2.setInt(1, comment_id);
         				ps2.executeUpdate();
         				out.print(JsonResponse(true));
         				out.flush();
@@ -110,7 +110,7 @@ public class LikePost extends HttpServlet {
         			}
         			else
         			{
-        				out.print(JsonResponse("Could not like post."));
+        				out.print(JsonResponse("Could not like comment."));
     					out.flush();
         	    		return;
         			}

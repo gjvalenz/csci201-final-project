@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serial;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -23,25 +24,25 @@ import java.sql.Statement;
 /**
  * Servlet implementation class LogoutDispatcher
  */
-@WebServlet("/api/post/like")
-public class LikePost extends HttpServlet {
+@WebServlet("/api/comment/create")
+public class CreateComment extends HttpServlet {
     @Serial
     private static final long serialVersionUID = 1L;
     
-    public String JsonResponse(String error, Boolean success)
+    public String JsonResponse(String error, Boolean success, int id)
     {
-    	return String.format("{ \"error\": \"%s\", \"success\": %b }", error, success);
+    	return String.format("{ \"error\": \"%s\", \"success\": %b, \"commentID\": %d }", error, success, id);
     	
     }
     
-    public String JsonResponse(Boolean success)
+    public String JsonResponse(Boolean success, int id)
     {
-    	return JsonResponse("", true);
+    	return JsonResponse("", true, id);
     }
     
     public String JsonResponse(String error)
     {
-    	return JsonResponse(error, false);
+    	return JsonResponse(error, false, -1);
     }
 
     /**
@@ -54,21 +55,9 @@ public class LikePost extends HttpServlet {
     	PrintWriter out = response.getWriter();
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
-    	String p1 = request.getParameter("postID");
-    	int post_id = Integer.parseInt(p1);
-    	if(post_id == -1)
-    	{
-    		out.print(JsonResponse("Failed to like post"));
-    		out.flush();
-    		return;
-    	}
+    	String body = request.getParameter("body");
+    	int postId = Integer.parseInt(request.getParameter("postID"));
     	HttpSession session=request.getSession(false);
-    	if(session == null || !request.isRequestedSessionIdValid())
-    	{
-    		out.print(JsonResponse("No user logged in with this session."));
-    		out.flush();
-    		return;
-    	}
     	try
     	{
     		Class.forName("com.mysql.jdbc.Driver").newInstance();
@@ -80,38 +69,49 @@ public class LikePost extends HttpServlet {
     	}
 		if(session != null)
 		{
-			int pluser = (int)session.getAttribute("user_id");
-			if(pluser != -1) // valid user
+			if(session.getAttribute("user_id") != null) // valid user
 			{
-    			String sql = "INSERT INTO post_like(post_id, pluser) VALUES(?, ?)";
-    			String sql2 = "UPDATE post SET like_count = like_count + 1 WHERE post_id = ?";
+				int user_id = (int)session.getAttribute("user_id");
+				if(user_id == -1)
+				{
+					session.invalidate();
+					out.print(JsonResponse("Invalid session."));
+					out.flush();
+					return;
+				}
+				String name = (String) session.getAttribute("name");
+    			String sql ="INSERT INTO comment(body, cuser, ctime, uname, likes_count, ppost) VALUES(?, ?, ?, ?, ?, ?)";
     			try(
     	    			Connection conn = DriverManager.getConnection(Constant.DBURL, Constant.DBUserName, Constant.DBPassword);
     	    			PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);)
     	    	{
-    				stmt.setInt(1, post_id);
-    				stmt.setInt(2, pluser);
-        			stmt.executeUpdate();
+    				stmt.setString(1, body);
+    				stmt.setInt(2, user_id);
+    				long time = System.currentTimeMillis();
+    				String date = Constant.sdf.format(new Date(time));
+    				stmt.setString(3, date);
+    				stmt.setString(4, name);
+    				stmt.setInt(5, 0);
+    				stmt.setInt(6, postId);
+    				stmt.executeUpdate();
         			ResultSet rs = stmt.getGeneratedKeys();
         			if(rs.next())
         			{
         				if(rs.wasNull())
         				{
-        					out.print(JsonResponse("Could not like post."));
+        					out.print(JsonResponse("Could not create comment. Please try again."));
         					out.flush();
             	    		return;
         				}
-        				PreparedStatement ps2 = conn.prepareStatement(sql2);
-        				ps2.setInt(1, post_id);
-        				ps2.executeUpdate();
-        				out.print(JsonResponse(true));
+        				int comment_id = rs.getInt(1);
+        				out.print(JsonResponse(true, comment_id));
         				out.flush();
         				return;
         			}
         			else
         			{
-        				out.print(JsonResponse("Could not like post."));
-    					out.flush();
+        				out.print(JsonResponse("Could not create comment. Please try again."));
+        				out.flush();
         	    		return;
         			}
     	    	}
@@ -131,6 +131,12 @@ public class LikePost extends HttpServlet {
 				out.flush();
 				return;
 			}
+		}
+		else
+		{
+			out.print(JsonResponse("No user logged in with this session."));
+			out.flush();
+			return;
 		}
     }
 
