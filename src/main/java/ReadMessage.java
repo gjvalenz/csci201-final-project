@@ -60,6 +60,15 @@ public class ReadMessage extends HttpServlet {
     		return;
     	}
     	HttpSession session=request.getSession(false);
+    	try
+    	{
+    		Class.forName("com.mysql.jdbc.Driver").newInstance();
+    	} catch(Exception e)
+    	{
+    		out.print(JsonResponse("Could not connect to database. Try again"));
+			out.flush();
+    		return;
+    	}
 		if(session != null)
 		{
 			int ufrom = (int)session.getAttribute("user_id");

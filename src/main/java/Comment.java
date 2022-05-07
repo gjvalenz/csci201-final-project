@@ -12,10 +12,12 @@ import java.util.*;
 
 
 public class Comment{
-	//User fromUser; not yet defined
+	int comment_id;
 	String comment;
-
-	
+	String time;
+	int likes;
+	int from_user;
+	int to_post;
 	
 	public void Comment(/*User user, */String comment){
 		this.comment = comment;

@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import Util.Constant;
+import Util.UserJobs;
 
 /**
  * API
@@ -104,9 +105,10 @@ public class Login extends HttpServlet {
     		    				session.setAttribute("email", email);
     		    				session.setAttribute("name", name);
     		    				session.setAttribute("github", github);
-    		    				
     		    				out.print(JsonResponse(true, session.getId()));
     		    				out.flush();
+    		    				UserJobs.setActive();
+    		    				UserJobs.startJob(session); // starts thread to do this
     		    				return;
     						}
     						else
