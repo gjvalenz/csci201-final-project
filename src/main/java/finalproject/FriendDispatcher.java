@@ -1,3 +1,5 @@
+package finalproject;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -18,17 +20,18 @@ import javax.servlet.ServletConfig; //added
 import javax.servlet.ServletContext; //added
 import java.nio.charset.*; //added
 
-@WebServlet("/FRDispatcher") //added
-public class FRDispatcher extends HttpServlet {
+@WebServlet("/FriendDispatcher") //added
+public class FriendDispatcher extends HttpServlet {
     @Serial
     private static final long serialVersionUID = 1L;
     
     /**
      * Default constructor.
      */
-    public FRDispatcher() {
+    public FriendDispatcher() {
     	
     }
+
 
     /**
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
@@ -40,16 +43,14 @@ public class FRDispatcher extends HttpServlet {
         // TODO
     	
     	String email = request.getParameter("email");
-    	ArrayList<User> profiles = GetProfile.getFriendRequests(email);
+    	ArrayList<User> profiles = GetProfile.getFriends(email);
     	
-    	request.setAttribute("friend_requests", profiles);
-    	RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/requests.jsp");
+    	request.setAttribute("friends", profiles);
+    	RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/friends.jsp");
     	dispatcher.forward(request, response);
     	
     }
-    
-    
-
+   
     /**
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
      *      response)

@@ -1,3 +1,5 @@
+package finalproject;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -17,16 +19,24 @@ import javax.servlet.RequestDispatcher; //added
 import javax.servlet.ServletConfig; //added
 import javax.servlet.ServletContext; //added
 import java.nio.charset.*; //added
+/**
+ * Servlet implementation class SearchDispatcher
+ */
 
-@WebServlet("/FriendDispatcher") //added
-public class FriendDispatcher extends HttpServlet {
+@WebServlet("/SearchDispatcher") //added
+public class SearchDispatcher extends HttpServlet {
     @Serial
     private static final long serialVersionUID = 1L;
     
+    String keyWord;
+    String sort;
+    String searchType;
+
     /**
      * Default constructor.
      */
-    public FriendDispatcher() {
+    public SearchDispatcher() {
+    	
     	
     }
 
@@ -40,15 +50,43 @@ public class FriendDispatcher extends HttpServlet {
             throws ServletException, IOException {
         // TODO
     	
-    	String email = request.getParameter("email");
-    	ArrayList<User> profiles = GetProfile.getFriends(email);
+    	searchType = "name"; //default
     	
-    	request.setAttribute("friends", profiles);
-    	RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/friends.jsp");
+    	keyWord = request.getParameter("searchbar");
+    	
+    	
+    	String category = request.getParameter("category");
+    	
+    	
+    	
+    	GetProfile getProfile = new GetProfile();
+    	
+    	ArrayList<User> profiles = GetProfile.getProfiles(keyWord, category);
+    	
+    	//Profile[] profile = profiles.toArray(new Profile[profiles.size()]);
+    	
+    	request.setAttribute("results", profiles);
+    	
+    	request.setAttribute("keyWord_", keyWord);
+    	//request.setAttribute("searchType_", searchType);
+    	request.setAttribute("searchType", category);
+    	
+ 
+    	
+    	
+    	RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/search.jsp");
     	dispatcher.forward(request, response);
     	
+    
+    	
+    	
+    	
+    	
+    	
     }
-   
+    
+    
+
     /**
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
      *      response)

@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Home</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <style>
+      body {
+        background-size: contain;
+        background-color: #ff8a00;
+        background-image: linear-gradient(#d0d9dc, #6367dd);
+        background-repeat: no-repeat;
+      }
+      #contains-nav {
+      	width:100%;
+      	position:fixed;
+      	top:0px;
+      }
+      .topnav {
+        text-align: center;
+      }
+      #filler {
+      	height:100px;
+      }
+      .topnav input[type="text"] {
+        width: 400px;
+        font-size: 20px;
+        color: rgb(0, 0, 255);
+        border: solid;
+        border-color: black;
+        border-radius: 10px;
+        background-color: transparent;
+        
+      }
+      .topnav ::placeholder {
+        color: rgb(0, 0, 255);
+      }
+      img {
+        margin-top: 100px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .auth {
+        text-align: center;
+        font-size: 30px;
+        margin-top: 20px;
+      }
+      .auth button {
+        font-size: 30px;
+        color: rgb(246, 255, 0);
+        text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
+        background-color: transparent;
+        border: solid;
+        border-color: transparent;
+        margin-right: 10px;
+        margin-left: 10px;
+      }
+      .auth button:hover {
+        border-color: rgb(246, 255, 0);
+        border-radius: 10px;
+      }
+      #custom {
+      	margin-left:20px;
+      	margin-right:20px;
+      }
+      #main{
+      	text-align: center;
+      }
+      #gighub {
+      	height:30%;
+      	width:auto;
+      	-webkit-transform: scale(1.3);
+       -ms-transform: scale(1.3);
+       transform: scale(1.3);
+      	transition: transform 3.5s;
+      	animation: pulse 1s linear infinite;
+      	
+      }
+      @-webkit-keyframes "pulse" {
+0% {
+    -webkit-transform: scale(1.1);
+    transform: scale(1.5);
+    transition: transform 8.5s;
+}
+50% {
+   -webkit-transform: scale(0.8);
+   transform: scale(1.3);
+   transition: transform 7.5s;
+}
+100% {
+    -webkit-transform: scale(1);
+   transform: scale(1.1);
+   transition: transform 3.5s;
+}
+}
+      #row {
+      	display:flex;
+      	flex-direction:row;
+      }
+      #gighub:hover {
+       -webkit-transform: scale(1.5);
+       -ms-transform: scale(1.5);
+       transform: scale(1.5);
+       transition: transform 1.5s;
+      }
+      #gighub:hover main{
+      	background-image: linear-gradient(#6367dd,#d0d9dc);
+      	transition: transform 1.5s;
+      }
+      #footer {
+      	height:50px;
+      	background-color:black;
+      	color:white;
+      	padding-top:15px;
+      	font-family: 'Courier New', Courier, monospace;
+      	
+      }
+      #container {
+      width: 100%;
+      height:590px;
+      /* height: 500px; */
+      
+      -webkit-perspective: 800; /* For compatibility with iPhone 3.0, we leave off the units here */
+      -webkit-perspective-origin: 50% 225px;
+    }
+    #stage {
+      width: 100%;
+      height: 100%;
+      -webkit-transition: -webkit-transform 2s;
+      -webkit-transform-style: preserve-3d;
+    }
+    
+    #shape {
+      position: relative;
+      top: 160px;
+      /* left:1000px; */
+      margin: 0 auto;
+      height: 200px;
+      width: 200px;
+      -webkit-transform-style: preserve-3d;
+    }
+    
+    .plane {
+      position: absolute;
+      height: 200px;
+      width: 200px;
+      border: 1px solid white;
+      -webkit-border-radius: 12px;
+      -webkit-box-sizing: border-box;
+      text-align: center;
+      font-family: Times, serif;
+      /* font-size: 124pt; */
+      font-size: 40pt;
+      text-align: center;
+      box-sizing: border-box;
+      padding-top:50px;
+      margin-bottom; auto;
+      color: black;
+      background-color: rgba(255, 255, 255, 0.6);
+      -webkit-transition: -webkit-transform 2s, opacity 2s;
+      -webkit-backface-visibility: hidden;
+    }
+
+    #shape.backfaces .plane {
+      -webkit-backface-visibility: visible;
+    }
+    
+    #shape {
+      -webkit-animation: spin 8s infinite linear;
+    }
+
+    @-webkit-keyframes spin {
+      from { -webkit-transform: rotateY(0); }
+      to   { -webkit-transform: rotateY(-360deg); }
+    }
+
+    /* ---------- cube styles ------------- */
+    .cube > .one {
+      -webkit-transform: scale3d(1.2, 1.2, 1.2) rotateX(90deg) translateZ(100px);
+    }
+
+    .cube > .two {
+      -webkit-transform: scale3d(1.2, 1.2, 1.2) translateZ(100px);
+    }
+
+    .cube > .three {
+      -webkit-transform: scale3d(1.2, 1.2, 1.2) rotateY(90deg) translateZ(100px);
+    }
+
+    .cube > .four {
+      -webkit-transform: scale3d(1.2, 1.2, 1.2) rotateY(180deg) translateZ(100px);
+    }
+
+    .cube > .five {
+      -webkit-transform: scale3d(1.2, 1.2, 1.2) rotateY(-90deg) translateZ(100px);
+    }
+
+    .cube > .six {
+      -webkit-transform: scale3d(1.2, 1.2, 1.2) rotateX(-90deg) translateZ(100px) rotate(180deg);
+    }
+
+
+    .cube > .seven {
+      -webkit-transform: scale3d(0.8, 0.8, 0.8) rotateX(90deg) translateZ(100px) rotate(180deg);
+    }
+
+    .cube > .eight {
+      -webkit-transform: scale3d(0.8, 0.8, 0.8) translateZ(100px);
+    }
+
+    .cube > .nine {
+      -webkit-transform: scale3d(0.8, 0.8, 0.8) rotateY(90deg) translateZ(100px);
+    }
+
+    .cube > .ten {
+      -webkit-transform: scale3d(0.8, 0.8, 0.8) rotateY(180deg) translateZ(100px);
+    }
+
+    .cube > .eleven {
+      -webkit-transform: scale3d(0.8, 0.8, 0.8) rotateY(-90deg) translateZ(100px);
+    }
+
+    .cube > .twelve {
+      -webkit-transform: scale3d(0.8, 0.8, 0.8) rotateX(-90deg) translateZ(100px);
+    }
+
+    /* ---------- ring styles ------------- */
+    .ring > .one {
+      -webkit-transform: translateZ(380px);
+    }
+
+    .ring > .two {
+      -webkit-transform: rotateY(30deg) translateZ(380px);
+    }
+
+    .ring > .three {
+      -webkit-transform: rotateY(60deg) translateZ(380px);
+    }
+
+    .ring > .four {
+      -webkit-transform: rotateY(90deg) translateZ(380px);
+    }
+
+    .ring > .five {
+      -webkit-transform: rotateY(120deg) translateZ(380px);
+    }
+
+    .ring > .six {
+      -webkit-transform: rotateY(150deg) translateZ(380px);
+    }
+
+    .ring > .seven {
+      -webkit-transform: rotateY(180deg) translateZ(380px);
+    }
+
+    .ring > .eight {
+      -webkit-transform: rotateY(210deg) translateZ(380px);
+    }
+
+    .ring > .nine {
+      -webkit-transform: rotateY(-120deg) translateZ(380px);
+    }
+
+    .ring > .ten {
+      -webkit-transform: rotateY(-90deg) translateZ(380px);
+    }
+
+    .ring > .eleven {
+      -webkit-transform: rotateY(300deg) translateZ(380px);
+    }
+
+    .ring > .twelve {
+      -webkit-transform: rotateY(330deg) translateZ(380px);
+    }
+
+    .controls {
+      width: 80%;
+      margin: 0 auto;
+      padding: 5px 20px;
+      -webkit-border-radius: 12px;
+      background-color: rgba(255, 255, 255, 0.5);
+    }
+    .controls > div {
+      margin: 10px;
+    }
+    
+    .HelloUser{
+			font-size: 17px;
+			color: white;
+			font-family: Roboto;
+			
+		}
+      
+    </style>
+  </head>
+  <body>
+      <div id="main">
+	      <div id="contains-nav">
+	      	<nav class="navbar navbar-dark bg-dark">
+	
+	            <div class="container-fluid">
+	                <a class="navbar-brand" href="index3.jsp">GigHub</a>
+	                  <div class="HelloUser" style="color:white; font-size: 17px; text-align: center; margin-left: -50%; font-family:Roboto">${HelloUser}</div>
+	                <form class="d-flex">
+	                    <button class="btn btn-outline-success me-2" id="custom" type="button" onclick="location.href='login.jsp'">Login</button>
+	                    <button class="btn btn-sm btn-outline-secondary" id="custom" type="button" onclick="location.href='register.jsp'">Register</button>
+ 						<button class="btn btn-outline-success me-2" id="custom" type="button" onclick="location.href='search.jsp'">Search For A User</button>	                    
+	                </form>
+	           </div>
+	        </nav>   
+	      </div>
+          
+    
+	     <div id="rowe">
+	        <div id="filler"></div>
+	        <div id="row">
+	        
+		        <div id="container">
+			        <div id="stage" style>
+			            <div id="shape" class="backfaces cube">
+			                <div class="plane seven"></div>
+			                <div class="plane two">CSCI</div>
+			                <div class="plane three">201</div>
+			                <div class="plane four">Final</div>
+			                <div class="plane five">Project</div>
+			                <div class="plane twelve"></div>
+			            </div>
+			        </div>
+		    	</div>
+			    
+			    <div id="logo">
+			    	<img id="gighub" src="FPlogo.png"/>
+			    </div>
+			    
+			    <div id="container">
+			        <div id="stage" style>
+			            <div id="shape" class="backfaces cube">
+			                <div class="plane one"></div>
+			                <div class="plane eight">Share</div>
+			                <div class="plane nine">Connect</div>
+			                <div class="plane ten">Chat</div>
+			                <div class="plane eleven">Hire</div>
+			                <div class="plane six"></div>
+			            </div>
+			        </div>
+			    </div>
+	        
+	        </div>
+	    </div>
+	    
+	    
+	    <div id="footer">
+	    	<p>A project by Group 33</p>
+	    </div>
+	
+	
+      </div>
+  </body>
+</html>
