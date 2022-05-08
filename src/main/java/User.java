@@ -20,13 +20,13 @@ public class User extends Profile{
 		this.passkey = passkey;
 		this.email = email;
 
-		/*try {
+		try {
 			conn = DriverManager.getConnection(Constant.DBURL, Constant.DBUserName, Constant.DBPassword);
         	st = conn.createStatement();
 		}
 		catch(SQLException ie) {
 			ie.printStackTrace();
-		}*/
+		}
 	}
 	
 	public void sendRequest(String from, String to) {
