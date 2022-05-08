@@ -37,20 +37,19 @@ public class Register extends HttpServlet {
     	return false;
     }
     
-    public String JsonResponse(String error, Boolean success, String id)
+    public String JsonResponse(String error, Boolean success, String user, int user_id, int profile_id, String email, String name, String github)
     {
-    	return String.format("{ \"error\": \"%s\", \"success\": %b, \"user\": \"%s\"}", error, success, id);
-    	
+    	return String.format("{ \"error\": \"%s\", \"success\": %b, \"user\": \"%s\", \"user_id\": %d, \"profile_id\": %d, \"email\": \"%s\", \"name\": \"%s\", \"github\": \"%s\" }", error, success, user, user_id, profile_id, email, name, github);
     }
     
-    public String JsonResponse(Boolean success, String id)
+    public String JsonResponse(String error, Boolean success)
     {
-    	return JsonResponse("", true, id);
+    	return String.format("{ \"error\": \"%s\", \"success\": %b }", error, success);
     }
     
     public String JsonResponse(String error)
     {
-    	return JsonResponse(error, false, "-1");
+    	return JsonResponse(error, false);
     }
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -134,7 +133,7 @@ public class Register extends HttpServlet {
     				session.setAttribute("email", email);
     				session.setAttribute("name", name);
     				session.setAttribute("github", github);
-    				out.print(JsonResponse(true, session.getId()));
+    				out.print(JsonResponse("", true, session.getId(), user_id, profile_id, email, name, github));
     				out.flush();
     				UserJobs.setActive();
     				UserJobs.startJob(session); // starts thread to do this

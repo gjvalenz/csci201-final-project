@@ -93,7 +93,7 @@
   		  	 if(data.success)
   		  	 {
   		  		 alert("Success! token is " + data.user);
-  		  		 document.cookie = "user=" + data.user + ";"; // how we can tell if user is logged in :)
+  		  		 localStorage.setItem('userInfo', JSON.stringify(data));
   		  	  }
   		  	 else
   		     {

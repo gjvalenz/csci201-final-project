@@ -25,27 +25,13 @@
 <body>
  <div class="register">
  <div>
- 	Post:<input type="text" name="body" id="body" />
- 	<button id="create-post">Send</button>
+ 	UserID:<input type="text" id="userID" />
+ 	<button id="get-posts">Get their posts</button>
  </div>
- <button id="get-feed">Get Feed</button>
  <div id="feed"></div>
  </div>
  <script>
- var global_posts = [];
- 
- $('#create-post').click(function(){
-	 $.post('./api/post/create', {body: $('#body').val()}, function(data){
-	  	 if(data.success)
-	  	 {
-	  		 alert("Success! Post id is " + data.postID);
-	  	  }
-	  	 else
-	     {
-	  		 alert("Error: " + data.error);
-	     }
-	 });
- });
+ var user_posts = [];
  
  function generatePost(post, index)
  {
@@ -57,14 +43,6 @@
 	 return "<div class='comment' data-index='" + index +"' data-comment-id='" + comment.comment_id + "'><h3>" + comment.comment_user_name + "</h3><p>" + comment.body + "</p><p class='comment-likes-count'>" + comment.likes_count + "</p></div>";
  }
  
- function addPosts(posts)
- {
-	 for(var i = 0; i < posts.length; i++)
-	 {
-		 $('#feed').append(generatePost(posts[i], i));
-	 }	 
- }
- 
  function addComments(cb, cs)
  {
 	 for(var i = 0; i < cs.length; i++)
@@ -73,36 +51,43 @@
 	 }	 
  }
  
- $("#get-feed").click(function(){
-	 $.get('./api/feed', function(data){
+ function addPosts(posts)
+ {
+	 for(var i = 0; i < posts.length; i++)
+	 {
+		 $('#feed').append(generatePost(posts[i], i));
+	 }	 
+ }
+ 
+ $('#get-posts').click(function(){
+	 $.get('./api/user/posts', {userID: $('#userID').val()}, function(data){
 	  	 if(data.success)
 	  	 {
-	  		 global_posts = data.feed;
-	  		 addPosts(global_posts);
-	  		 console.log(global_posts);
-	  		//$("#feed").text(JSON.stringify(data.feed));
-	  	  }
+	  		user_posts = data.feed;
+	  		addPosts(user_posts);
+	  	 }
 	  	 else
 	     {
 	  		 alert("Error: " + data.error);
 	     }
-	 }); 
+	 });
  });
  
- $('#feed').on('click', '.post-like', function(){
-	 console.log('clicked');
+ $('#feed').on('click', '.fetch-comments', function(){
 	 var that = $(this);
 	 var index = Number($(this).parent().attr('data-index'));
-	 var comment = $(this).siblings("input").val();
-	 $.post('./api/post/like', {postID: $(this).parent().attr('data-post-id')}, function(data){
+	 var comment_base = $(this).siblings('.comments');
+	 var post_id = $(this).parent().attr('data-post-id');
+	 $.get('./api/post/comments', {postID: $(this).parent().attr('data-post-id')}, function(data){
 		 if(data.success)
-		 {	
-			 global_posts[index].liked = true;
-			 global_posts[index].likes_count++;
-			 $('.post-likes').eq(index).text("Liked");
-			 var num = Number($('.post-likes-count').eq(index).text());
-			 $('.post-likes-count').eq(index).text(num + 1);
-			 that.attr("disabled", true);
+		 {
+			 if(user_posts[index].comments)
+		     {
+				 user_posts[index].comments;
+				 comment_base.empty();
+			 }
+			 user_posts[index].comments = data.comments;
+			 addComments(comment_base, user_posts[index].comments);
 		 }
 		 else
 		 {
@@ -128,13 +113,13 @@
 			 {
 				 name = JSON.parse(localStorage.getItem('userInfo')).name;
 			 }
-			 if(global_posts[index].comments)
+			 if(user_posts[index].comments)
 		     {
-				 global_posts[index].comments.push({comment_id: data.commentID, likes_count: 0, body: comment, comment_user_name: name || 'Null' });
+				 user_posts[index].comments.push({comment_id: data.commentID, likes_count: 0, body: comment, comment_user_name: name || 'Null' });
 			 }
 			 else
 		     {
-				global_posts[index].comments = [{comment_id: data.commentID, likes_count: 0, body: comment,  comment_user_name: name || 'Null' }];
+				user_posts[index].comments = [{comment_id: data.commentID, likes_count: 0, body: comment,  comment_user_name: name || 'Null' }];
 		     }
 			 addComments(comment_base, [{comment_id: data.commentID, likes_count: 0, body: comment,  comment_user_name: name || 'Null' }]);
 		 }
@@ -144,29 +129,6 @@
 		 }
 	 });
  });
- $('#feed').on('click', '.fetch-comments', function(){
-	 var that = $(this);
-	 var index = Number($(this).parent().attr('data-index'));
-	 var comment_base = $(this).siblings('.comments');
-	 var post_id = $(this).parent().attr('data-post-id');
-	 $.get('./api/post/comments', {postID: $(this).parent().attr('data-post-id')}, function(data){
-		 if(data.success)
-		 {
-			 if(global_posts[index].comments)
-		     {
-				 global_posts[index].comments;
-				 comment_base.empty();
-			 }
-			 global_posts[index].comments = data.comments;
-			 addComments(comment_base, global_posts[index].comments);
-		 }
-		 else
-		 {
-			 alert("Error: " + data.error);
-		 }
-	 });
- });
-
  </script>
 </body>
 </html>

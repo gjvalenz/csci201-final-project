@@ -24,74 +24,36 @@ import java.util.ArrayList;
 /**
  * Servlet implementation class LogoutDispatcher
  */
-@WebServlet("/api/feed")
-public class GetFeed extends HttpServlet {
+@WebServlet("/api/post/comments")
+public class GetPostComments extends HttpServlet {
     @Serial
     private static final long serialVersionUID = 1L;
     
-    public String asJSONArray(ArrayList<Post> ps)
+    public String asJSONArray(ArrayList<Comment> cs)
     {
     	String array = "[";
-    	for(Post p: ps)
-    		array += p.asJSON() + ',';
-    	if(ps.size() > 0)
+    	for(Comment c: cs)
+    		array += c.asJSON() + ',';
+    	if(cs.size() > 0)
     		array = array.substring(0, array.length() - 1);
     	array += "]";
     	return array;
     }
     
-    public String JsonResponse(String error, Boolean success, ArrayList<Post> posts)
+    public String JsonResponse(String error, Boolean success, ArrayList<Comment> comments)
     {
-    	return String.format("{ \"error\": \"%s\", \"success\": %b, \"feed\": %s }", error, success, asJSONArray(posts));
+    	return String.format("{ \"error\": \"%s\", \"success\": %b, \"comments\": %s }", error, success, asJSONArray(comments));
     	
     }
     
-    public String JsonResponse(Boolean success, ArrayList<Post> posts)
+    public String JsonResponse(Boolean success, ArrayList<Comment> comments)
     {
-    	return JsonResponse("", true, posts);
+    	return JsonResponse("", true, comments);
     }
     
     public String JsonResponse(String error)
     {
-    	return JsonResponse(error, false, new ArrayList<Post>());
-    }
-    
-    void notLoggedInFeed(PrintWriter out)
-    {
-    	String sql = "SELECT post_id, body, puser, ctime, uname, like_count FROM post LIMIT 50";
-		try(
-    			Connection conn = DriverManager.getConnection(Constant.DBURL, Constant.DBUserName, Constant.DBPassword);
-    			PreparedStatement stmt = conn.prepareStatement(sql);)
-    	{
-			ArrayList<Post> posts = new ArrayList<Post>();
-			ResultSet rs = stmt.executeQuery();
-			while(rs.next())
-			{
-				if(!rs.wasNull())
-				{
-					int post_id = rs.getInt(1);
-					String body = rs.getString(2);
-					String time = rs.getString(4);
-					int post_user = rs.getInt(3);
-					String uname = rs.getString(5);
-					int likes_count = rs.getInt(6);
-					Boolean liked = false;
-					posts.add(new Post(post_id, body, time, uname, likes_count, post_user, liked));
-				}
-			}
-			posts.sort((Post p1, Post p2) -> p2.time.compareTo(p1.time));
-			out.print(JsonResponse(true, posts));
-			out.flush();
-			return;
-    	}
-		catch(SQLException e)
-		{
-			System.err.println(e.getMessage());
-			e.printStackTrace();
-			out.print(JsonResponse("SQL error."));
-			out.flush();
-			return;
-		}
+    	return JsonResponse(error, false, new ArrayList<Comment>());
     }
 
     /**
@@ -105,6 +67,7 @@ public class GetFeed extends HttpServlet {
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
     	HttpSession session=request.getSession(false);
+    	int postID = Integer.parseInt(request.getParameter("postID"));
     	try {
     		UserJobs.endJob();
     	} catch(InterruptedException e)
@@ -126,43 +89,28 @@ public class GetFeed extends HttpServlet {
 			if(session.getAttribute("user_id") != null) // valid user
 			{
 				int user_id = (int)session.getAttribute("user_id");
-		    	ArrayList<Integer> friends = (ArrayList<Integer>) session.getAttribute("friends");
-		    	String list = "";
-		    	if(friends != null)
-		    	{
-			    	for(Integer f: friends)
-			    		list += f.toString() + ",";
-			    	list += Integer.toString(user_id);
-		    	}
-		    	else
-		    	{
-		    		out.print(JsonResponse(true, new ArrayList<Post>()));
-	    			out.flush();
-	    			return;
-		    	}
-				String sql = String.format("SELECT post_id, body, puser, ctime, uname, like_count FROM post WHERE puser IN (%s)", list);
-				System.out.println(sql);
-				//String sql2 = "SELECT COUNT(*), SUM(CASE WHEN post_id = ? THEN 1 ELSE 0 END) as LikeCount, SUM(CASE WHEN post_id = ? AND pluser = ? THEN 1 ELSE 0 END) as Liked FROM post_like";
-				String sql2 = "SELECT COUNT(*), SUM(CASE WHEN post_id = ? AND pluser = ? THEN 1 ELSE 0 END) as Liked FROM post_like";
+				String sql = "SELECT comment_id, body, cuser, ctime, cuname, likes_count, ppost FROM comment WHERE ppost = ? ";
+				String sql2 = "SELECT COUNT(*), SUM(CASE WHEN comment_id = ? AND luser = ? THEN 1 ELSE 0 END) as Liked FROM comment_like";
 				try(
     	    			Connection conn = DriverManager.getConnection(Constant.DBURL, Constant.DBUserName, Constant.DBPassword);
     	    			PreparedStatement stmt = conn.prepareStatement(sql);)
     	    	{
-    				ArrayList<Post> posts = new ArrayList<Post>();
+    				ArrayList<Comment> comments = new ArrayList<Comment>();
+    				stmt.setInt(1, postID);
     				ResultSet rs = stmt.executeQuery();
     				while(rs.next())
     				{
     					if(!rs.wasNull())
     					{
-    						int post_id = rs.getInt(1);
+    						int comment_id = rs.getInt(1);
     						String body = rs.getString(2);
     						String time = rs.getString(4);
-    						int post_user = rs.getInt(3);
+    						int comment_user = rs.getInt(3);
     						String name = rs.getString(5);
     						int like_count = rs.getInt(6);
     						Boolean liked = false;
     						PreparedStatement stmt2 = conn.prepareStatement(sql2);
-    						stmt2.setInt(1, post_id);
+    						stmt2.setInt(1, comment_id);
     						stmt2.setInt(2, user_id);
     						ResultSet rs2 = stmt2.executeQuery();
     						if(rs2.next())
@@ -176,11 +124,11 @@ public class GetFeed extends HttpServlet {
     								liked = did_like > 0;
     							}
     						}
-    						posts.add(new Post(post_id, body, time, name, like_count, post_user, liked));
+    						comments.add(new Comment(comment_id, body, time, name, like_count,comment_user, postID, liked));
     					}
     				}
-    				posts.sort((Post p1, Post p2) -> p2.time.compareTo(p1.time));
-    				out.print(JsonResponse(true, posts));
+    				comments.sort((Comment c1, Comment c2) -> c1.time.compareTo(c2.time));
+    				out.print(JsonResponse(true, comments));
     				out.flush();
     				return;
     	    	}
@@ -196,14 +144,48 @@ public class GetFeed extends HttpServlet {
 			else // invalid user
 			{
 				session.invalidate();
-				this.notLoggedInFeed(out);
+				out.print(JsonResponse("Invalid session."));
+				out.flush();
 				return;
 			}
 		}
 		else // not logged in, send feed
 		{
-			this.notLoggedInFeed(out);
-			return;
+			String sql = "SELECT comment_id, body, cuser, ctime, cuname, likes_count, ppost FROM comment WHERE ppost = ? ";
+			try(
+	    			Connection conn = DriverManager.getConnection(Constant.DBURL, Constant.DBUserName, Constant.DBPassword);
+	    			PreparedStatement stmt = conn.prepareStatement(sql);)
+	    	{
+				ArrayList<Comment> comments = new ArrayList<Comment>();
+				stmt.setInt(1, postID);
+				ResultSet rs = stmt.executeQuery();
+				while(rs.next())
+				{
+					if(!rs.wasNull())
+					{
+						int comment_id = rs.getInt(1);
+						String body = rs.getString(2);
+						String time = rs.getString(4);
+						int comment_user = rs.getInt(3);
+						String name = rs.getString(5);
+						int like_count = rs.getInt(6);
+						Boolean liked = false;
+						comments.add(new Comment(comment_id, body, time, name, like_count,comment_user, postID, liked));
+					}
+				}
+				comments.sort((Comment c1, Comment c2) -> c1.time.compareTo(c2.time));
+				out.print(JsonResponse(true, comments));
+				out.flush();
+				return;
+	    	}
+			catch(SQLException e)
+			{
+				System.err.println(e.getMessage());
+				e.printStackTrace();
+				out.print(JsonResponse("SQL error."));
+				out.flush();
+				return;
+			}
 		}
     }
 

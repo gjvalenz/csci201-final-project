@@ -80,7 +80,7 @@ public class CreateComment extends HttpServlet {
 					return;
 				}
 				String name = (String) session.getAttribute("name");
-    			String sql ="INSERT INTO comment(body, cuser, ctime, uname, likes_count, ppost) VALUES(?, ?, ?, ?, ?, ?)";
+    			String sql ="INSERT INTO comment(body, cuser, ctime, cuname, likes_count, ppost) VALUES(?, ?, ?, ?, ?, ?)";
     			try(
     	    			Connection conn = DriverManager.getConnection(Constant.DBURL, Constant.DBUserName, Constant.DBPassword);
     	    			PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);)
