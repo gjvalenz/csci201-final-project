@@ -1,6 +1,3 @@
-
-
-
 <!DOCTYPE html>
 <html>
   <head>
@@ -48,6 +45,9 @@
             	transition: transform 3.5s;
             	animation: pulse 1s linear infinite;
 
+            }
+            #container {
+            z-index:-1000000;
             }
             @-webkit-keyframes "pulse" {
       0% {
