@@ -16,6 +16,8 @@
   <head>
     <title>Search</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+     <script src="https://kit.fontawesome.com/3204349982.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
     <style>
       body {
         height: 600px;
@@ -65,6 +67,10 @@
 		
 		.buttonHolder{ text-align: center; }
 			
+		a, a:hover, a:focus, a:active {
+     		 text-decoration: none;
+     		 color: inherit;
+		 }
 
 
     </style>
@@ -126,11 +132,9 @@
   					</div>
   			
   		<div class="section-wrap">
-		   <input id="name" name="category" type="radio" value="name"  class="flavors-radio">
+		   <input id="name" name="category" type="radio" value="name" checked class="flavors-radio">
 		   <label for="name"><span></span>Name</label>
-		        <input id="job" name="category" type="radio" value="job" class="flavors-radio">
-		   <label for="job"><span></span>Job</label>
-		        <input id="company" name="category" type="radio" value="company" checked class="flavors-radio">
+		        <input id="company" name="category" type="radio" value="company" class="flavors-radio">
 		   <label for="company"><span></span>Company</label>
 		 </div>
 		 
@@ -143,32 +147,27 @@
   			
   			</form>
   			
-  				  <h1 style="margin-left: 5%; font-size: 16px; font-family: Roboto">Results for ${keyWord_} in ${searchType_}</h1>
+  			<%if (request.getAttribute("keyWord_") != null) {%>
+  			
+  				  <h1 style="margin-left: 5%; font-size: 16px; font-family: Roboto">Results for ${keyWord_} in ${searchType}</h1>
+  				  
+  				  <% } %>
   				    
 	<c:forEach var="Profile" items="${results}">
 
 	<hr style="height:2px; width:90%; border-width:0; color:grey; background-color:grey; position: center; align:center">
 	
-	<div class="restaurant_" style="margin-left: 7.5% ">
+	<div class="restaurant_" style="margin-left: 7.5%; display: flex;">
 	
-	<span style="display: inline">
-	
-	</span>
-
-	<span>
 	<br>
-
-	
-	<a href = "ProfileDispatcher?email2=${Profile.getEmail()}" >${Profile.getName()}</a><br>
+	<div style = "width: 10%; float: left">
+	<h1 style = "font-size: 40px"><i class="fa fa-user"></i></h1></div>
+	<div style = "width: 80%; float: right">
 	<br>
-
-	</span>
-	
-	
-	
-	
-	
-
+	<a style = "max-width: 50" href = "ProfileDispatcher?email2=${Profile.getEmail()}" >${Profile.getName()}</a><br>
+	<p style = "color: #3B3B3B "> Email: ${Profile.getEmail()} </p>
+	</div>
+	<br>
 
 
 	<br>
