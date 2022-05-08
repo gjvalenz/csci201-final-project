@@ -1,12 +1,9 @@
-package finalproject;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.google.gson.reflect.TypeToken;
+import javax.servlet.http.HttpSession;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -19,6 +16,8 @@ import javax.servlet.RequestDispatcher; //added
 import javax.servlet.ServletConfig; //added
 import javax.servlet.ServletContext; //added
 import java.nio.charset.*; //added
+
+
 
 @WebServlet("/FriendDispatcher") //added
 public class FriendDispatcher extends HttpServlet {
@@ -41,9 +40,11 @@ public class FriendDispatcher extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // TODO
+    	HttpSession session = request.getSession(false);
     	
-    	String email = request.getParameter("email");
-    	ArrayList<User> profiles = GetProfile.getFriends(email);
+    	int id = (int) session.getAttribute("user_id");
+    	
+    	ArrayList<User> profiles = GetProfile.getFriends(id);
     	
     	request.setAttribute("friends", profiles);
     	RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/friends.jsp");
