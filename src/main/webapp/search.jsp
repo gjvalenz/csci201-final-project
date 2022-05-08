@@ -1,6 +1,5 @@
 
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" %>
-
          
   <%@taglib  uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
   
@@ -69,6 +68,17 @@
 
 
     </style>
+    
+       <%HttpSession session2 = request.getSession(false);
+    
+    String name = null;
+    
+    if(session2!=null){
+    	
+    	name = (String)session2.getAttribute("name");
+    }
+    %>
+    
   </head>
   <body>
     <div class="toppage">
@@ -76,7 +86,31 @@
             <img src="FPlogo.png">
         </a>
         <div class="loginredirect">
-            <button onclick="window.location.href='login.jsp';">Login To An Existing Account</button>
+    
+            
+            	                <% if(name == null){ %>
+  		<span >
+	  <button class="btn btn-outline-success me-2" id="custom" type="button" onclick="location.href='login.jsp'">Login</button>
+	  <button class="btn btn-sm btn-outline-secondary" id="custom" type="button" onclick="location.href='register.jsp'">Register</button>
+	  </span>
+
+	 
+	
+  <% } %>
+  
+    <%
+  if(name != null){ 
+  %>
+  	
+	     <form class="logout" action="LogoutDispatcher" method="GET">
+        	<button type="submit" class="btn btn-outline-success me-2" id="custom">Logout</button>
+    	</form>
+  
+  <% }
+  
+  %>
+  
+  
         </div>
       </div>
     <!--  change this to do a call via ajax so we don't actually need to do form[POST] -->
@@ -125,7 +159,7 @@
 	<br>
 
 	
-	<a href = "ProfileDispatcher?email=${Profile.getEmail()}" >${Profile.getName()}</a><br>
+	<a href = "ProfileDispatcher?email2=${Profile.getEmail()}" >${Profile.getName()}</a><br>
 	<br>
 
 	</span>
