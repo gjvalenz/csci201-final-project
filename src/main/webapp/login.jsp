@@ -90,6 +90,7 @@
   	  $.get('./LoginDispatcher', dt, function(data){
   		if(data.success)
 		  	 {
+  				localStorage.setItem('userInfo', JSON.stringify(data));
 		  		window.location.replace("index3.jsp");
 		  	  }
 		  	 else

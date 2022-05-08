@@ -36,7 +36,7 @@
 			<h1 class="text-center my-5">Posts</h1>
 			 <div class="col mx-2">
 				<div class="text-center">
-					<button id="get-feed" class="btn btn-warning">Get Feed</button>
+					<h3>Your Feed</h3>
 				</div>
  				<div id="feed"></div>
 			 </div>
@@ -56,7 +56,8 @@
 	 $.post('./api/post/create', {body: $('#body').val()}, function(data){
 	  	 if(data.success)
 	  	 {
-	  		 alert("Success! Post id is " + data.postID);
+	  		 fetchFeed();
+	  		 $('#body').val('');
 	  	  }
 	  	 else
 	     {
@@ -76,7 +77,7 @@
 				<button class='post-like btn btn-danger col-2'\${(post.liked ? "disabled":"")}>Like</button>
 				<p class='post-likes-count col'>\${post.likes_count}</p>
 			</div>
-			<button class='fetch-comments btn btn-warning mb-3'>Fetch comments</button>
+			<button class='fetch-comments btn btn-warning mb-3'>Load comments...</button>
 			<div class='comments'></div>
 			<input type='text' name='comment' class='form-control col me-2'/> 
 			<button class='post-comment btn btn-success col-2 align-self-end'>Comment</button>
@@ -108,7 +109,7 @@
 	 }	 
  }
  
- $("#get-feed").click(function(){
+ function fetchFeed(){
 	 $.get('./api/feed', function(data){
 	  	 if(data.success)
 	  	 {
@@ -121,15 +122,16 @@
 	     {
 	  		 alert("Error: " + data.error);
 	     }
-	 }); 
- });
+	 });
+ }
+ 
+ fetchFeed();
  
  $('#feed').on('click', '.post-like', function(){
 	 console.log('clicked');
 	 var that = $(this);
-	 var index = Number($(this).parent().attr('data-index'));
-	 var comment = $(this).siblings("input").val();
-	 $.post('./api/post/like', {postID: $(this).parent().attr('data-post-id')}, function(data){
+	 var index = Number($(this).parent().parent().attr('data-index'));
+	 $.post('./api/post/like', {postID: $(this).parent().parent().attr('data-post-id')}, function(data){
 		 if(data.success)
 		 {	
 			 global_posts[index].liked = true;
