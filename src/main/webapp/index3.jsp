@@ -283,9 +283,35 @@
     .controls > div {
       margin: 10px;
     }
+    
+    .HelloUser{
+			font-size: 17px;
+			color: white;
+			font-family: Roboto;
+			
+		}
       
     </style>
+    
+    
+    <%HttpSession session2 = request.getSession(false);
+    
+    String name = null;
+    String email = null;
+    
+    if(session2!=null){
+    	
+    	name = (String)session2.getAttribute("name");
+    	email = (String)session2.getAttribute("email");
+    }
+    %>
+    
+    
   </head>
+  
+ 
+  
+
   <body>
       <div id="main">
 	      <div id="contains-nav">
@@ -293,11 +319,57 @@
 	
 	            <div class="container-fluid">
 	                <a class="navbar-brand" href="index3.jsp">GigHub</a>
-	                <form class="d-flex">
-	                    <button class="btn btn-outline-success me-2" id="custom" type="button" onclick="location.href='login.jsp'">Login</button>
-	                    <button class="btn btn-sm btn-outline-secondary" id="custom" type="button" onclick="location.href='register.jsp'">Register</button>
- 						<button class="btn btn-outline-success me-2" id="custom" type="button" onclick="location.href='search.jsp'";>Search For A User</button>	                    
-	                </form>
+	                
+	                  <div class="HelloUser" style="color:white; font-size: 17px; text-align: center; margin-left: -30%; font-family:Roboto">${HelloUser}</div>
+	                  
+	                <% if(name==null){ %>
+  		<span class="loginandregister" style="margin-left: 80%">
+	  <button class="btn btn-outline-success me-2" id="custom" type="button" onclick="location.href='login.jsp'">Login</button>
+	  <button class="btn btn-sm btn-outline-secondary" id="custom" type="button" onclick="location.href='register.jsp'">Register</button>
+	  </span>
+	  <form class="d-flex">
+        <button class="btn btn-outline-success me-2" id="custom" type="button" onclick="location.href='search.jsp'">Search For A User</button>	                    
+             </form>
+
+	 
+	
+  <% } %>
+  
+    <%
+  if(name!=null){ 
+  %>
+        <form class="logout" action="ProfileDispatcher" method="GET">
+          <button type="submit" class="btn btn-outline-success me-2" id="custom" name = "you" value= "<%= email %> ">Profile</button>
+      </form>
+
+      <form class="logout" action="createpost.jsp">
+        <button class="btn btn-outline-success me-2" id="custom">Feed</button>
+    </form>
+
+  		 <form class="logout" action="FriendDispatcher" method="GET">
+        	<button type="submit" class="btn btn-outline-success me-2" id="custom">Friends</button>
+    	</form>
+    	
+    	 <form class="logout" action="FRDispatcher" method="GET">
+        	<button type="submit" class="btn btn-outline-success me-2" id="custom">Friend Requests</button>
+    	</form>
+    	
+      <form class="d-flex">
+
+        <button class="btn btn-outline-success me-2" id="custom" type="button" onclick="location.href='search.jsp'">Search For A User</button>	                    
+             </form>
+             
+	     <form class="logout" action="LogoutDispatcher" method="GET">
+        	<button type="submit" class="btn btn-outline-success me-2" id="custom">Logout</button>
+    	</form>
+    	
+  
+  <% }
+  
+  %>
+
+	                
+	                
 	           </div>
 	        </nav>   
 	      </div>
