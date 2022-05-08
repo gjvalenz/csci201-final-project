@@ -29,43 +29,21 @@
           width: 200px;
           height: auto;
       }
-      .loginredirect {
+      .logout {
         float: right;
       }
-      .loginredirect button {
+      .logout button {
           border: solid;
           border-color: transparent;
           border-radius: 5px;
           background-color: transparent;
-          font-size: 15px;
+          font-size: 20px;
           padding: 10px;
       }
-      .loginredirect button:hover {
+      .logout button:hover {
           border-color: black;
       }
-      .register {
-          display: block;
-          text-align: center;
-      }
-      
-		.box{
-		    width: 100%;
-		    text-align:center;
-		}
-		
-		.box input {
-	     height: 50px;
-	     width: 800px;
-	}
-		.borderless td, .borderless th {border: none;}
-		
-		.section-wrap {
-		  padding: 50px;
-		  overflow: hidden;
-		  text-align:center;
-		}
-		
-		.accept {
+	.accept {
 		  background-color: green; /* Green */
 		  border: none;
 		  border-radius: 8px;
@@ -92,9 +70,17 @@
 		  float: right;
 		  cursor: pointer;
 		}
-		
-		.buttonHolder{ text-align: center; }
-			
+        .friends {
+        font-size: 20px;
+        color: white;
+        text-decoration: none;
+        }
+        .friends:hover {
+            color: blue;
+        }
+        .friends:active {
+            color: yellow;
+        }
     </style>
   </head>
   <body>
@@ -108,35 +94,23 @@
     	</form>
     </div>	
     	
- 	<h1>Friend Requests</h1>
+ 	<h1 style="margin-left: 5%;">Friend Requests</h1>
   				    
 	<c:forEach var="Profile" items="${friend_requests}">
 
 	<hr style="height:2px; width:90%; border-width:0; color:grey; background-color:grey; position: center; align:center">
 	
-	<div class="restaurant_" style="margin-left: 7.5%; display: flex; padding-top: 20px; padding-bottom: 20px">
+	<div style="margin-left: 7.5%; display: flex; padding-top: 20px; padding-bottom: 20px">
 	
 	<div style = "float: left; width: 50%">
-	<a href = "ProfileDispatcher?email2=${Profile.getEmail()}" >${Profile.getName()}</a> 
+	<a class="friends" href = "ProfileDispatcher?email=${Profile.getEmail()}" >${Profile.getName()}</a> 
 	</div>
 	<div style = "float: left; width: 40%">
 	<form action = "SendDispatcher" method = "GET">
-	<button class = "deny" type = "submit" name="deny" value="${Profile.getEmail()}"><i class="fa fa-x"></i></button>
+	<button class = "deny" type = "submit" name="deny" value="${Profile.getEmail()}"><i class="fa fa-close"></i></button>
 	<button class = "accept" type = "submit" name="accept" value="${Profile.getEmail()}"><i class="fa fa-check"></i></button>
 	</form>
 	</div>
-	
-	<br>
-	
-
-	<br>
-
-	</span>
-	<br>
-	<br>
-	
-	</div></c:forEach>
-	      		
-
+    </div></c:forEach>
   </body>
 </html>
