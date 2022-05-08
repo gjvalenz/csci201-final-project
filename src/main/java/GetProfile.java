@@ -16,12 +16,13 @@ public class GetProfile {
 	
 	public static User getProfile(String email) {
     	Connection conn = null;
-    	Statement st = null;
+    	PreparedStatement st = null;
+    	String sql = "SELECT * FROM user INNER JOIN profile_info ON user.profile_id = profile_info.profile_id WHERE email = ?";
 		ResultSet rs = null;
         try {
         	Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection(Constant.DBURL, Constant.DBUserName, Constant.DBPassword);
-        	st = conn.createStatement();
+        	st = conn.prepareStatement(sql);
 
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -29,10 +30,11 @@ public class GetProfile {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        String sql = "SELECT * FROM user INNER JOIN profile_info ON user.profile_id = profile_info.profile_id WHERE email = '" + email+ "';";
+        
         User user = null;
         try {
-			rs = st.executeQuery(sql);
+        	st.setString(1, email);
+			rs = st.executeQuery();
 			rs.next();
 			user = new User(rs.getString("passkey"), rs.getString("email"), rs.getString("name"), rs.getString("github_profile"), rs.getString("company_name"));
 		} catch (SQLException e) {
