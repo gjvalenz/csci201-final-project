@@ -1,187 +1,164 @@
-package finalproject;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import Util.Constant;
-
-import java.io.IOException;
-import java.io.Serial;
-
-import java.sql.*; //added
-
-import java.util.*; //added
-
-import javax.servlet.RequestDispatcher; //added
+import javax.servlet.http.HttpSession;
 
 
 /**
- * Servlet implementation class RegisterDispatcher
+ * API
  */
-
-@WebServlet("/RegisterDispatcher") //added
-
+@WebServlet("/RegisterDispatcher")
 public class RegisterDispatcher extends HttpServlet {
-    @Serial
-    private static final long serialVersionUID = 1L;
-    private static final String url = "jdbc:mysql://localhost:3306/PA4Users";
+	public void init() throws ServletException
+	{
+		
+	}
+	
+    public static Boolean anyNull(String... strs)
+    {
+    	for(String s: strs)
+    		if(s == null || s.isBlank())
+    			return true;
+    	return false;
+    }
     
-
-    /**
-     * Default constructor.
-     */
-    public RegisterDispatcher() {
+    public String JsonResponse(String error, Boolean success, String user, int user_id, int profile_id, String email, String name, String github)
+    {
+    	return String.format("{ \"error\": \"%s\", \"success\": %b, \"user\": \"%s\", \"user_id\": %d, \"profile_id\": %d, \"email\": \"%s\", \"name\": \"%s\", \"github\": \"%s\" }", error, success, user, user_id, profile_id, email, name, github);
+    }
+    
+    public String JsonResponse(String error, Boolean success)
+    {
+    	return String.format("{ \"error\": \"%s\", \"success\": %b }", error, success);
+    }
+    
+    public String JsonResponse(String error)
+    {
+    	return JsonResponse(error, false);
     }
 
-
-    /**
-     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-     * response)
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        //TODO
-    	
-    	
-    	//use the names that you provided for boxes in auth.html and use request.getParameter to get what user provided
-    	String email = request.getParameter("email");
-    	String passkey = request.getParameter("passkey");
-    	String confirmpasskey = request.getParameter("confirmpasskey");
-    	String name = request.getParameter("name");
-    	String github = request.getParameter("github");
-    	String company = request.getParameter("company");
-    	
-    	
-    	//check if inputted data is valid, Validate.java for validating
-    	
-    	Boolean valid = true;
-    	
-    	if(!Verify.isValidName(name)) {
-    		
-    		valid = false;
+	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		PrintWriter out = response.getWriter();
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		String name = request.getParameter("name");
+		String password = request.getParameter("password");
+		String confirmPassword = request.getParameter("confirmPassword");
+		String email = request.getParameter("email");
+		String github = request.getParameter("github");
+		String company = request.getParameter("company");
+		if(anyNull(name, password, confirmPassword, email))
+		{
+			System.out.println(String.format("%s, %s, %s, %s", name, password, confirmPassword, email));
+			out.print(JsonResponse("A required field is empty"));
+			out.flush();
+    		return;
+		}
+		if(!password.equals(confirmPassword))
+		{
+			out.print(JsonResponse("Password differ"));
+			out.flush();
+    		return;
+		}
+		/* example on how to use database*/
+		String sql = "SELECT user_id FROM user where email = ?";
+		String sql2 = String.format("INSERT INTO profile_info(name, github_profile, company_name) VALUES('%s', '%s', '%s')", name, github, company);
+		try
+    	{
+    		Class.forName("com.mysql.jdbc.Driver").newInstance();
+    	} catch(Exception e)
+    	{
+    		out.print(JsonResponse("Could not connect to database. Try again"));
+			out.flush();
+    		return;
     	}
-    	else if(!Verify.isValidEmail(email)) {
-    		
-    		valid = false;
-    	}
-    	
-    	else if(!Verify.isValidGithub(github)) {
-    		
-    		valid = false;
-    	}
-    	else if(!Verify.isValidCompany(github)) {
-    		
-    		valid = false;
-    	}
-    	
-    	else if(Verify.emailRegistered(email, request, response)) {
-    		
-    		valid = false;
-    	}
-    	
-    
-    	
-    	else if(!confirmpasskey.equals(passkey)) { //confirm password entry does not match password
-    		valid = false;
-    	}
-    	
-    	
-    	
-
-    	
-    	
-    	
-    	if(!valid) {
-    		//display error message
-    		request.setAttribute("register_error", "Invalid Registration."); //**
-    		
-    		
-    		request.getRequestDispatcher("register.jsp").include(request, response); //back to register page
-    		
-    	}
-    	
-    	else {
-    		try {
-				Class.forName("com.mysql.cj.jdbc.Driver"); 
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-    		
-    		Connection connection = null;
-    		try {
-				connection = DriverManager.getConnection(Constant.DBURL,  Constant.DBUserName, Constant.DBPassword); //user,password
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-    		
-    		
-    		Statement stmt = null;
-    		try {
-				stmt = connection.createStatement();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
- 
-    		
-    		ResultSet rs = null;
-    		
-    		try {
-				stmt.execute("INSERT INTO user(username, email, passkey) VALUES(" + "'" + name + "', '" + email + "', '" + passkey +"');");
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-    		finally { //should i put this after the stmt catch
-    			try {
-					connection.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+    	try(
+    			Connection conn = DriverManager.getConnection(Constant.DBURL, Constant.DBUserName, Constant.DBPassword);
+    			PreparedStatement stmt = conn.prepareStatement(sql);)
+    	{
+    		stmt.setString(1, email);
+    		ResultSet rs = stmt.executeQuery();
+    		if(rs.next())
+    		{
+    			if(!rs.wasNull())
+    			{
+    				out.print(JsonResponse("User already exists"));
+    				out.flush();
+    	    		return;
+    			}
     		}
-    		
-   
-    			
-    		Cookie cookie = new Cookie(name, email);
-    		cookie.setMaxAge(60*60); 
-    		response.addCookie(cookie);
-    		cookie.setDomain("http://localhost:8080/test2/"); //XXX
-    		
-    		
-    		request.setAttribute("HelloUser", "Hi, "+name+"!"); 
-    		
-    		
-    		
-    		request.setAttribute("Logout", "Logout");
-    	
-    		
-    		response.sendRedirect("index.jsp");
-    		
-    		
+    		Statement s2 = conn.createStatement();
+    		s2.executeUpdate(sql2, Statement.RETURN_GENERATED_KEYS);
+    		ResultSet r = s2.getGeneratedKeys();
+    		if(r.next())
+    		{
+    			if(r.wasNull())
+    			{
+    				out.print(JsonResponse("Could not create profile"));
+    				out.flush();
+    	    		return;
+    			}
+    			int profile_id = r.getInt(1);
+    			String sql3 = String.format("INSERT INTO user(passkey, email, profile_id) VALUES('%s', '%s', %d)", password, email, profile_id);
+    			Statement s3 = conn.createStatement();
+    			s3.executeUpdate(sql3, Statement.RETURN_GENERATED_KEYS);
+    			ResultSet r2 = s3.getGeneratedKeys();
+    			if(r2.next())
+    			{
+    				if(r2.wasNull())
+    				{
+    					out.print(JsonResponse("Could not create user"));
+    					out.flush();
+        	    		return;
+    				}
+    				int user_id = r2.getInt(1);
+    				HttpSession session=request.getSession();
+    				session.setAttribute("user_id", user_id);
+    				session.setAttribute("profile_id", profile_id);
+    				session.setAttribute("email", email);
+    				session.setAttribute("name", name);
+    				session.setAttribute("github", github);
+    				out.flush();
+    				UserJobs.setActive();
+    				UserJobs.startJob(session); // starts thread to do this
+    				return;
+    			}
+    			else
+    			{
+    				out.print(JsonResponse("Could not create user"));
+    				out.flush();
+    	    		return;
+    			}
+    		}
+    		else
+    		{
+    			out.print(JsonResponse("Could not create profile"));
+    			out.flush();
+	    		return;
+    		}
+    	} catch(SQLException e)
+    	{
+    		System.out.println(e.getMessage());
+    		System.out.println(e.getStackTrace());
+    		out.print(JsonResponse(e.getMessage()));
+			out.flush();
+			return;
     	}
-    	
-    	
-    
-    }
-
-    /**
-     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-     * response)
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        // TODO Auto-generated method stub
-        doGet(request, response);
-    }
-
+	}
+	
+	public void destroy() {
+		
+	}
 }
