@@ -54,7 +54,7 @@
   </head>
   <body>
     <div class="toppage">
-        <a href="index.jsp">
+        <a href="index3.jsp">
             <img src="FPlogo.png">
         </a>
         <div class="regredirect">
@@ -77,11 +77,9 @@
     function getFormData($form){
   	    var unindexed_array = $form.serializeArray();
   	    var indexed_array = {};
-
   	    $.map(unindexed_array, function(n, i){
   	        indexed_array[n['name']] = n['value'];
   	    });
-
   	    return indexed_array;
   	}
     $('#login-modal').submit(function(e)
@@ -89,18 +87,15 @@
   	  e.preventDefault();
   	  var dt = getFormData($(this));
   	  console.log(dt);
-  	  $.post('./api/user/login', dt, function(data){
-  		  	 if(data.success)
-  		  	 {
-  		  		 alert("Success! token is " + data.user);
-  		  		 localStorage.setItem('userInfo', JSON.stringify(data));
-  		  	  }
-  		  	 else
-  		     {
-  		  		 alert("Error: " + data.error);
-  		     }
-  			 //alert(JSON.stringify(data));
-  			 //alert("success!");
+  	  $.get('./LoginDispatcher', dt, function(data){
+  		if(data.success)
+		  	 {
+		  		window.location.replace("index3.jsp");
+		  	  }
+		  	 else
+		     {
+		  		 alert("Error: " + data.error);
+		     }
   		 });
     });
     </script>
