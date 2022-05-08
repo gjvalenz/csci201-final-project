@@ -1,5 +1,3 @@
-package finalproject; 
-
 public class Comment{
 	int comment_id;
 	String comment;
