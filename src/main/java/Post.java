@@ -1,4 +1,4 @@
-package finalproject;
+
 import java.util.ArrayList;
 
 public class Post {
