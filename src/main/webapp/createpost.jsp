@@ -23,9 +23,14 @@
   			-o-background-size: cover;
   			background-size: cover;
       	}
+		img {
+        	width: 200px;
+        	height: auto;
+      	}
 	</style>
 </head>
 <body>
+	<a href="index3.jsp"><img id="gighub" src="FPlogo.png"/></a>
 	<div class="container register">
 		<div class="row">
 			<h1 class="text-center my-5">Posts</h1>

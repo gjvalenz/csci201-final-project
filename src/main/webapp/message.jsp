@@ -28,24 +28,55 @@ String messages = (String) request.getAttribute("messages");
     <link href="index.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Roboto"
           rel="stylesheet" type="text/css">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+	<style>
+		body {
+			background: linear-gradient(#d0d9dc, #6367dd) no-repeat center center fixed !important; 
+  			-webkit-background-size: cover;
+  			-moz-background-size: cover;
+  			-o-background-size: cover;
+  			background-size: cover;
+      	}
+		img {
+        	width: 200px;
+        	height: auto;
+      	}
+	</style>
 </head>
 <body>
- <div class="register">
- <% if (errd) {%>
- <%= error %>
- <%} else {%>
- Hello, <%= name %>(<%= user_id %>)
- <div>
- 	Message:<input type="text" name="message" id="message" />
- 	To:<input type="text" id="whom" />
- 	<button id="send-message">Send</button>
+	<a href="index3.jsp"><img id="gighub" src="FPlogo.png"/></a>
+ <div class="container register">
+	 <h1><% if (errd) {%>
+		<%= error %>
+		<%} else {%>
+		Hello, <%= name %>!</h1>
+ <div class="row align-items-center">
+	 <div class="col-5">
+		<label for="message">Message:</label>
+		<input type="text" name="message" id="message" class="form-control"/>
+	 </div>
+	 <div class="col-5">
+		<label for="whom">To:</label>
+		<input type="text" id="whom" class="form-control"/>
+	 </div>
+	 <div class="col-2 text-center">
+		<button id="send-message" class="btn btn-success">Send</button>
+	</div>
  </div>
  <% } %>
- <%= messages %>
- <button id="get-messages">Get Messages</button>
- <div id="messages"></div>
- <button id="check-new-messages">Check New Messages</button>
- <div id="new-messages"></div>
+ <div class="row mt-3 mb-4">
+	 <h3>Message Log:</h3>
+	<%= messages %>
+ </div>
+ <div class="row my-2">
+	<button id="get-messages" class="btn btn-warning col-2">Get Messages</button>
+	<div id="messages" class="col"></div>
+ </div>
+ <div class="row my-2">
+	<button id="check-new-messages" class="btn btn-warning col-2">Check New Messages</button>
+	<div id="new-messages" class="col"></div>
+ </div>
  </div>
  <script>
  $('#send-message').click(function(){
