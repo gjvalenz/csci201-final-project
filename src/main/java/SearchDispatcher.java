@@ -1,12 +1,10 @@
-package finalproject;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-import com.google.gson.reflect.TypeToken;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -19,6 +17,7 @@ import javax.servlet.RequestDispatcher; //added
 import javax.servlet.ServletConfig; //added
 import javax.servlet.ServletContext; //added
 import java.nio.charset.*; //added
+
 /**
  * Servlet implementation class SearchDispatcher
  */
@@ -72,10 +71,13 @@ public class SearchDispatcher extends HttpServlet {
     	request.setAttribute("searchType", category);
     	
  
+ 
     	
     	
     	RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/search.jsp");
     	dispatcher.forward(request, response);
+    	
+    	//response.sendRedirect("search.jsp");
     	
     
     	
