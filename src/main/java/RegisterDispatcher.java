@@ -1,4 +1,3 @@
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -54,12 +53,12 @@ public class RegisterDispatcher extends HttpServlet {
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
 		String name = request.getParameter("name");
-		String password = request.getParameter("password");
-		String confirmPassword = request.getParameter("confirmPassword");
+		String password = request.getParameter("passkey");
+		String confirmPassword = request.getParameter("confirmpasskey");
 		String email = request.getParameter("email");
 		String github = request.getParameter("github");
 		String company = request.getParameter("company");
-		if(anyNull(name, password, confirmPassword, email))
+		if(Register.anyNull(name, password, confirmPassword, email))
 		{
 			System.out.println(String.format("%s, %s, %s, %s", name, password, confirmPassword, email));
 			out.print(JsonResponse("A required field is empty"));
@@ -130,7 +129,7 @@ public class RegisterDispatcher extends HttpServlet {
     				session.setAttribute("email", email);
     				session.setAttribute("name", name);
     				session.setAttribute("github", github);
-    				session.setAttribute("company", company);
+    				out.print(JsonResponse("", true, session.getId(), user_id, profile_id, email, name, github));
     				out.flush();
     				UserJobs.setActive();
     				UserJobs.startJob(session); // starts thread to do this
