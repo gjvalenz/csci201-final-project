@@ -51,11 +51,23 @@ public class ProfileDispatcher extends HttpServlet {
 		
 		if(session2!=null) {
 			emailLogin = (String) session2.getAttribute("email");
+			System.out.println(emailLogin);
 			if(request.getParameter("email2") == null) {
 				email = (String) request.getAttribute("email2");
+				System.out.println(email);
 			}
 			if(request.getParameter("you") != null) {
 				email = emailLogin;
+				System.out.println(email);
+				request.setAttribute("name", (String)session2.getAttribute("name"));
+				request.setAttribute("email", (String)session2.getAttribute("email"));
+				request.setAttribute("github", (String)session2.getAttribute("github"));
+				request.setAttribute("company", (String)session2.getAttribute("company"));
+				request.setAttribute("areFriends", false);
+				request.setAttribute("sentRequest", false);
+				RequestDispatcher requestdispatcher = getServletContext().getRequestDispatcher("/Profile.jsp");
+				requestdispatcher.forward(request, response);
+				return;
 			} 
 			request.setAttribute("areFriends", Verify.areFriends(emailLogin, email));
 			request.setAttribute("sentRequest", Verify.sentRequest(emailLogin,  email));

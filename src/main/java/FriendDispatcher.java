@@ -40,11 +40,17 @@ public class FriendDispatcher extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // TODO
+    	try {
+    		UserJobs.endJob();
+    	} catch(InterruptedException e)
+    	{
+    		Thread.currentThread().interrupt();
+    	}
     	HttpSession session = request.getSession(false);
-    	
+    	ArrayList<Integer> friends = (ArrayList<Integer>) session.getAttribute("friends");
     	int id = (int) session.getAttribute("user_id");
     	
-    	ArrayList<User> profiles = GetProfile.getFriends(id);
+    	ArrayList<User> profiles = GetProfile.getFriends(friends);
     	
     	request.setAttribute("friends", profiles);
     	RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/friends.jsp");
