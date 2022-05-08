@@ -1,5 +1,3 @@
-package Util;
-
 import javax.servlet.http.HttpSession;
 
 public class UserJobs {
