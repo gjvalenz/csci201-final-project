@@ -296,64 +296,44 @@
             </form>
 
             <% } %> <% if(name!=null){ %>
-            <form class="logout" action="ProfileDispatcher" method="GET">
-              <button
-                type="submit"
-                class="btn btn-outline-success me-2"
-                id="custom"
-                name="you"
-                value="<%= email %> "
-              >
-                Profile
-              </button>
-            </form>
+					<div class="loginandregister" style="margin-left: 70%">
+						<form class="logout" action="ProfileDispatcher"
+							style='display: inline;' method="GET">
+							<button type="submit" class="btn btn-outline-success me-2"
+								id="custom" name="you" value="<%=email%> ">
+								Profile</button>
+						</form>
 
-            <form class="logout" action="createpost.jsp">
-              <button class="btn btn-outline-success me-2" id="custom">
-                Feed
-              </button>
-            </form>
+						<form class="logout" style='display: inline;'
+							action="createpost.jsp">
+							<button class="btn btn-outline-success me-2" id="custom">
+								Feed</button>
+						</form>
 
-            <form class="logout" action="FriendDispatcher" method="GET">
-              <button
-                type="submit"
-                class="btn btn-outline-success me-2"
-                id="custom"
-              >
-                Friends
-              </button>
-            </form>
+						<form class="logout" style='display: inline;'
+							action="FriendDispatcher" method="GET">
+							<button type="submit" class="btn btn-outline-success me-2"
+								id="custom">Friends</button>
+						</form>
 
-            <form class="logout" action="FRDispatcher" method="GET">
-              <button
-                type="submit"
-                class="btn btn-outline-success me-2"
-                id="custom"
-              >
-                Friend Requests
-              </button>
-            </form>
+						<form class="logout" style='display: inline;'
+							action="FRDispatcher" method="GET">
+							<button type="submit" class="btn btn-outline-success me-2"
+								id="custom">Friend Requests</button>
+						</form>
 
-            <form class="d-flex">
-              <button
-                class="btn btn-outline-success me-2"
-                id="custom"
-                type="button"
-                onclick="location.href='search.jsp'"
-              >
-                Search For A User
-              </button>
-            </form>
+						<form class="class=logout" style='display: inline;'>
+							<button class="btn btn-outline-success me-2" id="custom"
+								type="button" onclick="location.href='search.jsp'">
+								Search For A User</button>
+						</form>
 
-            <form class="logout" action="LogoutDispatcher" method="GET">
-              <button
-                type="submit"
-                class="btn btn-outline-success me-2"
-                id="custom"
-              >
-                Logout
-              </button>
-            </form>
+						<form class="logout" action="LogoutDispatcher" method="GET"
+							style='display: inline;'>
+							<button type="submit" class="btn btn-outline-success me-2"
+								id="custom">Logout</button>
+						</form>
+					</div>
 
             <% } %>
           </div>
