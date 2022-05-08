@@ -320,6 +320,9 @@
 	            <div class="container-fluid">
 	                <a class="navbar-brand" href="index3.jsp">GigHub</a>
 	                
+			      <video autoplay playsinline style="pointer-events: none;" width="120" height="40" autoplay = "autoplay" loop = "loop" muted><source src="G-6.mp4" type="video/mp4"></video>
+			    
+			    
 	                  <div class="HelloUser" style="color:white; font-size: 17px; text-align: center; margin-left: -30%; font-family:Roboto">${HelloUser}</div>
 	                  
 	                <% if(name==null){ %>
