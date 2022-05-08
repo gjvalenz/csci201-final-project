@@ -1,12 +1,10 @@
-package finalproject;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.google.gson.reflect.TypeToken;
+import javax.servlet.http.HttpSession;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -19,6 +17,7 @@ import javax.servlet.RequestDispatcher; //added
 import javax.servlet.ServletConfig; //added
 import javax.servlet.ServletContext; //added
 import java.nio.charset.*; //added
+
 
 @WebServlet("/FRDispatcher") //added
 public class FRDispatcher extends HttpServlet {
@@ -40,13 +39,18 @@ public class FRDispatcher extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // TODO
+    	HttpSession session = request.getSession(false);
     	
-    	String email = request.getParameter("email");
-    	ArrayList<User> profiles = GetProfile.getFriendRequests(email);
+    	int id = (int) session.getAttribute("user_id");
+    	ArrayList<User> profiles = GetProfile.getFriendRequests(id);
     	
     	request.setAttribute("friend_requests", profiles);
-    	RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/requests.jsp");
+    	
+    	
+    	RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/friendrequests.jsp");
     	dispatcher.forward(request, response);
+    	
+    
     	
     }
     
