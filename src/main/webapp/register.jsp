@@ -2,9 +2,7 @@
 <html>
   <head>
     <title>Register</title>
-    <!--  for later
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-     -->
     <style>
       body {
         height: 600px;
@@ -86,7 +84,7 @@
      <div class="rerror" style="color:#7F7F7F; text-align: center;, font-family:Roboto">${register_error}</div>
      
     
-    <form class="register" action="RegisterDispatcher" method="GET">
+    <form class="register" id = "register-modal">
  	 
         <div class="email">
             <label for="email">Email:</label>
@@ -116,6 +114,32 @@
 
         <button type="submit">Register</button>
     </form>
-    
+    <script>
+    // https://stackoverflow.com/questions/11338774/serialize-form-data-to-json
+    function getFormData($form){
+  	    var unindexed_array = $form.serializeArray();
+  	    var indexed_array = {};
+  	    $.map(unindexed_array, function(n, i){
+  	        indexed_array[n['name']] = n['value'];
+  	    });
+  	    return indexed_array;
+  	}
+    $('#register-modal').submit(function(e)
+    {
+  	  e.preventDefault();
+  	  var dt = getFormData($(this));
+  	  console.log(dt);
+  	  $.get('./RegisterDispatcher', dt, function(data){
+  		if(data.success)
+		  	 {
+		  		window.location.replace("index3.jsp");
+		  	  }
+		  	 else
+		     {
+		  		 alert("Error: " + data.error);
+		     }
+  		 });
+    });
+    </script>
   </body>
 </html>
