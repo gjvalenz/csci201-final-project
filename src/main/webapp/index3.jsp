@@ -1,3 +1,6 @@
+
+
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -363,29 +366,29 @@
           <div id="container">
             <div id="stage" style>
               <div id="shape" class="backfaces cube">
-                <div class="plane seven"></div>
-                <div class="plane two">CSCI</div>
-                <div class="plane three">201</div>
-                <div class="plane four">Final</div>
-                <div class="plane five">Project</div>
-                <div class="plane twelve"></div>
+                <div class="plane seven draggable"></div>
+                <div class="plane two draggable">CSCI</div>
+                <div class="plane three draggable">201</div>
+                <div class="plane four draggable">Final</div>
+                <div class="plane five draggable">Project</div>
+                <div class="plane twelve draggable"></div>
               </div>
             </div>
           </div>
 
           <div id="logo">
-            <img id="gighub" src="FPlogo.png" />
+            <img id="gighub" class="draggable" src="FPlogo.png" />
           </div>
 
           <div id="container">
             <div id="stage" style>
               <div id="shape" class="backfaces cube">
-                <div class="plane one"></div>
-                <div class="plane eight">Share</div>
-                <div class="plane nine">Connect</div>
-                <div class="plane ten">Chat</div>
-                <div class="plane eleven">Hire</div>
-                <div class="plane six"></div>
+                <div class="plane one draggable"></div>
+                <div class="plane eight draggable">Share</div>
+                <div class="plane nine draggable">Connect</div>
+                <div class="plane ten draggable">Chat</div>
+                <div class="plane eleven draggable">Hire</div>
+                <div class="plane six draggable"></div>
               </div>
             </div>
           </div>
@@ -395,6 +398,14 @@
       <div id="footer">
         <p>A project by Group 33</p>
       </div>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/draggabilly@3/dist/draggabilly.pkgd.min.js"></script>
+    <script>
+        var $draggable = $('.draggable').draggabilly({
+        // options...
+        })
+        // var draggableElems = document.querySelectorAll('.draggable')
+    </script>
     </div>
   </body>
 </html>
