@@ -67,7 +67,7 @@
         cursor: pointer;
     }
     .message {
-        background-color: #2FC633; /* Green */
+        background-color: green; /* Green */
         border: none;
         border-radius: 8px;
         color: white;
