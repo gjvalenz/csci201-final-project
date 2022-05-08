@@ -1,5 +1,3 @@
-package finalproject;
-
 enum Status
 {
 	R, S
