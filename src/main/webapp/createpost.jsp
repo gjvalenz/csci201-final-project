@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta content="301645777112-2rlc9gth0f5d4reimjcm9bf0kj7ahec0.apps.googleusercontent.com" name="google-signin-client_id">
-    <title>Login / Register</title>
+    <title>Posts</title>
     <link href="https://fonts.googleapis.com" rel="preconnect">
     <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
     <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Roboto:wght@300&display=swap" rel="stylesheet">
