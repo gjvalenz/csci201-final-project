@@ -61,7 +61,7 @@ public class LoginDispatcher extends HttpServlet {
 		}
 		/* example on how to use database*/
 		String sql = "SELECT user_id, profile_id FROM user where email = ? and passkey = ?";
-		String sql2 = "SELECT name, github_profile from profile_info where profile_id = ?";
+		String sql2 = "SELECT name, github_profile, company_name from profile_info where profile_id = ?";
 		try
     	{
     		Class.forName("com.mysql.jdbc.Driver").newInstance();
@@ -93,7 +93,8 @@ public class LoginDispatcher extends HttpServlet {
     						if(!r.wasNull())
     						{
     							String name = r.getString(1);
-    		    				String github = rs.getString(2);
+    		    				String github = r.getString(2);
+    		    				String company = r.getString(3);
     		 
     		    				HttpSession session=request.getSession();
     		    				session.setAttribute("user_id", user_id);
@@ -101,6 +102,7 @@ public class LoginDispatcher extends HttpServlet {
     		    				session.setAttribute("email", email);
     		    				session.setAttribute("name", name);
     		    				session.setAttribute("github", github);
+    		    				session.setAttribute("company", company);
     		    				out.print(JsonResponse("", true, session.getId(), user_id, profile_id, email, name, github));
     		    				out.flush();
     		    				UserJobs.setActive();

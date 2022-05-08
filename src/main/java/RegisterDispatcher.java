@@ -130,6 +130,7 @@ public class RegisterDispatcher extends HttpServlet {
     				session.setAttribute("email", email);
     				session.setAttribute("name", name);
     				session.setAttribute("github", github);
+    				session.setAttribute("company", company);
     				out.flush();
     				UserJobs.setActive();
     				UserJobs.startJob(session); // starts thread to do this

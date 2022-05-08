@@ -87,6 +87,8 @@
  
  function addPosts(posts)
  {
+	 $('#feed').empty();
+
 	 for(var i = 0; i < posts.length; i++)
 	 {
 		 $('#feed').append(generatePost(posts[i], i));
