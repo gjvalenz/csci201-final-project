@@ -1,4 +1,3 @@
-package finalproject;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebInitParam;
