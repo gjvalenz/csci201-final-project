@@ -2,7 +2,9 @@
 <html>
   <head>
     <title>Register</title>
+    <!--  for later
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+     -->
     <style>
       body {
         height: 600px;
@@ -50,34 +52,57 @@
       .register button:hover {
           background-color: #6367dd;
       }
+      
+      		
+		.rerror, .lerror{
+			margin-top: 1%;
+			background-color: #ffcccc;
+			padding-top: 2%;
+			padding-bottom: 2%;
+			text-align: center;
+			
+			
+		}
+		
+		.rerror:empty, .lerror:empty{
+			display:none;
+		}
     </style>
   </head>
   <body>
+ 
+  
+
     <div class="toppage">
-        <a href="index.jsp">
+        <a href="index3.jsp">
             <img src="FPlogo.png">
         </a>
         <div class="loginredirect">
             <button onclick="window.location.href='login.jsp';">Login To An Existing Account</button>
-        </div>
+        </div>>
     </div>
     <!--  change this to do a call via ajax so we don't actually need to do form[POST] -->
-    <form class="register" id="register-modal">
+   
+     <div class="rerror" style="color:#7F7F7F; text-align: center;, font-family:Roboto">${register_error}</div>
+     
+    
+    <form class="register" action="RegisterDispatcher" method="GET">
+ 	 
         <div class="email">
             <label for="email">Email:</label>
-            <input name="email" type="text" id="email" required pattern="^(.+)@(.+)$" >
+            <input name="email" type="text" id="email">
         </div>
         <div class="name">
           <label for="name">Name:</label>
-          <input name="name" type="text" id="name" required>
+          <input name="name" type="text" id="name">
       </div>
         <div class="password">
             <label for="password">Password:</label>
-            <input name="password" type="text" id="password" required>
+            <input name="passkey" type="text" id="password">
         </div>
         <div class="confirmPassword">
           <label for="confirmPassword">Confirm Password:</label>
-          <input name="confirmPassword" type="text" id="confirmPassword" required>
+          <input name="confirmpasskey" type="text" id="confirmPassword">
       </div>
       <div class="github">
         <label for="github">Github URL:</label>
@@ -87,45 +112,10 @@
       <label for="company">Company:</label>
       <input name="company" type="text" id="company">
   </div>
+  
+
         <button type="submit">Register</button>
     </form>
+    
   </body>
-  <script>
-  // https://stackoverflow.com/questions/11338774/serialize-form-data-to-json
-  function getFormData($form){
-	    var unindexed_array = $form.serializeArray();
-	    var indexed_array = {};
-
-	    $.map(unindexed_array, function(n, i){
-	        indexed_array[n['name']] = n['value'];
-	    });
-
-	    return indexed_array;
-	}
-  $('#register-modal').submit(function(e)
-  {
-	  e.preventDefault();
-	  var dt = getFormData($(this));
-	  $.post('./api/user/register', dt, function(data){
-		  	 if(data.success)
-		  	 {
-		  		 alert("Success! token is " + data.user);
-  		  		 localStorage.setItem('userInfo', JSON.stringify(data));
-		  	  }
-		  	 else
-		     {
-		  		 alert("Error: " + data.error);
-		     }
-			 //alert(JSON.stringify(data));
-			 //alert("success!");
-		 });
-  });
-  function submit()
-  {
-	 $.post('./api/user/register', $("#register-modal").seralize(), function(data){
-		 alert(data);
-		 alert("success!");
-	 });
-  }
-  </script>
 </html>
