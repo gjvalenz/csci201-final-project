@@ -1,4 +1,3 @@
-package finalproject;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -13,8 +12,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import Util.Constant;
 
 //test purposes only
 @WebServlet("/users")
