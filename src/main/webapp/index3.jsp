@@ -266,7 +266,7 @@
             <div class="HelloUser">${HelloUser}</div>
 
             <% if(name==null){ %>
-            <span class="loginandregister" style="margin-left: 70%">
+            <span class="loginandregister" style="margin-left: 60%">
               <button
                 class="btn btn-outline-success me-2"
                 id="custom"
