@@ -110,7 +110,8 @@
 	<p style = "color: #3B3B3B "> Email: ${Profile.getEmail()} </p>
 	</div>
 	<div style = "width: 20%; float: right">
-	<form action = "Message?user_id=${Profile.getUser_Id}&name=${Profile.getName()}">
+	<form>
+	<a href = "message?id=${Profile.getUser_Id()}&name=${Profile.getName()}">Message</a>
 	<br>
 	<button class = "message" type = "submit" name="message">Message</button>
 	</form>
