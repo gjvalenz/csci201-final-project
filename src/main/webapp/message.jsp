@@ -141,6 +141,9 @@ messagesStr += "]";
 	  				var newMsg = msgs[i];
 	  				newMsg.nFrom = "<%= their_name %>";
 	  				newMsg.nTo = "<%= name %>";
+	  				for(var j = 0; j < user_messages.length; j++)
+	  					if(JSON.stringify(user_messages[j]) == JSON.stringify(msgs[i]))
+	  						break;
 	  				user_messages.push(newMsg);
 	  			}
 	  			populateMessages();
