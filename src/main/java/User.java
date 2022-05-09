@@ -1,6 +1,7 @@
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.*;
@@ -14,6 +15,7 @@ public class User extends Profile{
 	Connection conn;
 	Statement st;
 	int rs;
+	ResultSet rs2;
 	
 	public User(String passkey, String email, String username, String github, String company) {
 		super(username, github, company);
@@ -154,6 +156,20 @@ public class User extends Profile{
 	
 	public String getEmail() {
 		return this.email;
+	} 
+	
+	public int getUser_Id() {
+		String sql = "SELECT user_id FROM user WHERE email = '" + email + "';";
+		try {
+			rs2 = st.executeQuery(sql);
+			rs2.next();
+			return rs2.getInt("user_id");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return -1;
+
 	}
 	
 }
