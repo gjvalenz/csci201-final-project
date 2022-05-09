@@ -128,7 +128,7 @@
       		<br>
         		
   					<div class="box">
-    					<input name="searchbar" type="text" class="form-control" id="searchbar"  placeholder="Search by Name, Job, or Company">
+    					<input name="searchbar" type="text" class="form-control" id="searchbar"  placeholder="Search by Name or Company">
   					</div>
   			
   		<div class="section-wrap">
