@@ -236,7 +236,9 @@ body {
         </div>
         <%} %>
         <%} else { %>
-        <h3>User Has No Repositories</h3>
+        <p></p>
+       <button id="get-feed" class="btn btn-warning" style="background-color: red; border-color:red"><%= "User Has No Repositories " %></button>
+        <p></p>
         <%} %>        
    
         </div>
