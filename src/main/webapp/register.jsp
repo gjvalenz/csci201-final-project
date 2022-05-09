@@ -103,7 +103,7 @@
           <input name="confirmpasskey" type="text" id="confirmPassword">
       </div>
       <div class="github">
-        <label for="github">Github URL:</label>
+        <label for="github">Github user:</label>
         <input name="github" type="text" id="github">
     </div>
     <div class="company">
