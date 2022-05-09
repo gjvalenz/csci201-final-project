@@ -221,7 +221,7 @@ body {
     <div class="info" style="margin-left: 12.5%">
         <img class="github-img" src="<%= guser.avatar_url %>"/>
         <h2><%= guser.name %></h2>
-        <button id="get-feed" class="btn btn-warning">Followers:</button>  <%= guser.followers %><p></p><button id="get-feed" class="btn btn-warning">Following:</button> <%= guser.following %>
+        <button id="get-feed" class="btn btn-warning">Followers:  <%= guser.followers %></button><p></p><button id="get-feed" class="btn btn-warning">Following: <%= guser.following %></button>
 					<p></p><button id="get-feed" class="btn btn-warning">
 				<a href="<%= guser.html_url %>" style="text-decoration: none">Profile</a></button>
         <% if (hasRepos) {%>
