@@ -55,7 +55,19 @@
         color: yellow;
     }
     .remove {
-        background-color: red; /* Green */
+        background-color: #F52B2B; /* Green */
+        border: none;
+        border-radius: 8px;
+        color: white;
+        padding: 10px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        cursor: pointer;
+    }
+    .message {
+        background-color: green; /* Green */
         border: none;
         border-radius: 8px;
         color: white;
@@ -86,16 +98,26 @@
   				    
 	<c:forEach var="Profile" items="${friends}">
 
-	<hr style="height:2px; width:90%; border-width:0; color:grey; background-color:grey; position: center; align:center">
+	<hr style="height:1px; width:90%; border-width:0; color:black; background-color:black; position: center; align:center">
 	
-	<div style="margin-left: 7.5%; display: flex; padding-top: 20px; padding-bottom: 20px">
+	<div style="margin-left: 7.5%; display: flex">
 
-
-	<div style = "float: left; width: 50%">
+	<div style = "width: 10%; float: left">
+	<h1 style = "font-size: 40px"><i class="fa fa-user"></i></h1></div>
+	<div style = "float: left; width: 30%">
+	<br>
 	<a class = "friends" style = "max-width: 50%"href = "ProfileDispatcher?email2=${Profile.getEmail()}" >${Profile.getName()}</a> 
+	<p style = "color: #3B3B3B "> Email: ${Profile.getEmail()} </p>
 	</div>
-	<div style = "width: 40%; float: right">
+	<div style = "width: 20%; float: right">
+	<form action = "message.jsp">
+	<br>
+	<button class = "message" type = "submit" name="message">Message</button>
+	</form>
+	</div>
+	<div style = "width: 20%; float: right">
 	<form action = "SendDispatcher" method = "GET">
+	<br>
 	<button class = "remove" type = "submit" name="remove" value="${Profile.getEmail()}">Remove Friend</button>
 	</form>
 	</div>

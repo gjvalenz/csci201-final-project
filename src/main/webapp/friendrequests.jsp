@@ -48,7 +48,8 @@
 		  border: none;
 		  border-radius: 8px;
 		  color: white;
-		  padding: 10px 10px;
+		  width: 50px;
+		  height: 50px;
 		  text-align: center;
 		  text-decoration: none;
 		  display: inline-block;
@@ -62,7 +63,8 @@
 		  border: none;
 		  border-radius: 8px;
 		  color: white;
-		  padding: 10px 10px;
+		  width: 50px;
+		  height: 50px;
 		  text-align: center;
 		  text-decoration: none;
 		  display: inline-block;
@@ -98,17 +100,22 @@
   				    
 	<c:forEach var="Profile" items="${friend_requests}">
 
-	<hr style="height:2px; width:90%; border-width:0; color:grey; background-color:grey; position: center; align:center">
+	<hr style="height:1px; width:90%; border-width:0; color:black; background-color:black; position: center; align:center">
 	
-	<div style="margin-left: 7.5%; display: flex; padding-top: 20px; padding-bottom: 20px">
-	
-	<div style = "float: left; width: 50%">
-	<a class="friends" href = "ProfileDispatcher?email=${Profile.getEmail()}" >${Profile.getName()}</a> 
+	<div style="margin-left: 7.5%; display: flex">
+
+	<div style = "width: 10%; float: left">
+	<h1 style = "font-size: 40px"><i class="fa fa-user"></i></h1></div>
+	<div style = "float: left; width: 30%">
+	<br>
+	<a class = "friends" style = "max-width: 50%"href = "ProfileDispatcher?email2=${Profile.getEmail()}" >${Profile.getName()}</a> 
+	<p style = "color: #3B3B3B "> Email: ${Profile.getEmail()} </p>
 	</div>
 	<div style = "float: left; width: 40%">
+	<br>
 	<form action = "SendDispatcher" method = "GET">
 	<button class = "deny" type = "submit" name="deny" value="${Profile.getEmail()}"><i class="fa fa-close"></i></button>
-	<button class = "accept" type = "submit" name="accept" value="${Profile.getEmail()}"><i class="fa fa-check"></i></button>
+	<button class = "accept" type = "submit" name="accept" value="${Profile.getEmail()}" style = "margin-right: 20px"><i class="fa fa-check"></i></button>
 	</form>
 	</div>
     </div></c:forEach>

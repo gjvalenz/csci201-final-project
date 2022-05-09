@@ -15,6 +15,16 @@
     <%@ page import="java.util.Collections" %>
     <%@ page import="util.GithubUser" %>
     <%@ page import="util.GithubRepo" %>
+    
+        <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Roboto:wght@300&display=swap" rel="stylesheet">
+    <script crossorigin="anonymous" src="https://kit.fontawesome.com/3204349982.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <link href="index.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 
 <!DOCTYPE html>
 <html>
@@ -44,9 +54,13 @@ body {
           background-color: transparent;
           font-size: 20px;
           padding: 10px;
+          color: black;
+          margin-top: 5%;
       }
       .logout button:hover, .fr button:hover {
           border-color: black;
+          background-color: transparent;
+          color: black;
       }
       .profile {
         display: grid;
@@ -59,6 +73,18 @@ body {
         grid-column: 2;
         grid-row: 1;
         font-size: 30px;
+        border: solid;
+   		border-color: black;
+        border-radius: 5px;
+        text-align: center;
+        margin-bottom: 7%;
+        margin-top: 7%;
+        margin-right: 25%;
+        margin-left: 25%;
+        border-width: 2%;
+        
+        
+        
       }
       .github {
         grid-column: 1;
@@ -165,6 +191,7 @@ body {
         <%if(name!=null) {%>
         <form class="logout" action="LogoutDispatcher" method="GET">
         	<button type="submit" class="btn btn-outline-success me-2" id="custom">Logout</button>
+        	
     	</form>
     	<% } else { %>
     	<form class="logout" action="register.jsp">
@@ -179,7 +206,7 @@ body {
         <div class="name"><%=(String)request.getAttribute("name")%>'s Profile</div>
         <div class="github">
           <h2>Github</h2>
-          <a href="<%=(String)request.getAttribute("github")%>">Github Link</a>
+          <a href="<%= guser.html_url %>" style="text-decoration: none">Github Link</a>
         </div>
         <div class="company">
           <h2>Company</h2>
@@ -191,13 +218,16 @@ body {
         </div>
     </div>
     <% if(hasGithub) { %>
-    <div class="info">
+    <div class="info" style="margin-left: 12.5%">
         <img class="github-img" src="<%= guser.avatar_url %>"/>
         <h2><%= guser.name %></h2>
-        <p>Followers: <%= guser.followers %></p><p>Following: <%= guser.following %></p>
-        <a href="<%= guser.html_url %>">Profile</a>
+        <button id="get-feed" class="btn btn-warning">Followers:  <%= guser.followers %></button><p></p><button id="get-feed" class="btn btn-warning">Following: <%= guser.following %></button>
+					<p></p><button id="get-feed" class="btn btn-warning">
+				<a href="<%= guser.html_url %>" style="text-decoration: none">Profile</a></button>
         <% if (hasRepos) {%>
-        <%= "Repos here" %>
+        <p></p>
+        <button id="get-feed" class="btn btn-warning"><%= "Repositories: " %></button>
+        <p></p>
          <% for(GithubRepo r: repos) {%>
          <div>
         	<a href="<%= r.html_url%>"><%= r.name%></a><%= r.language == null ? "" : "(" + r.language + ")" %>
@@ -206,7 +236,9 @@ body {
         </div>
         <%} %>
         <%} else { %>
-        <h3>User has no Repos</h3>
+        <p></p>
+       <button id="get-feed" class="btn btn-warning" style="background-color: red; border-color:red"><%= "User Has No Repositories " %></button>
+        <p></p>
         <%} %>        
    
         </div>

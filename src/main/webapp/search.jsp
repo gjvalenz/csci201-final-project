@@ -128,7 +128,7 @@
       		<br>
         		
   					<div class="box">
-    					<input name="searchbar" type="text" class="form-control" id="searchbar"  placeholder="Search by Name, Job, or Company">
+    					<input name="searchbar" type="text" class="form-control" id="searchbar"  placeholder="Search by Name or Company">
   					</div>
   			
   		<div class="section-wrap">
@@ -155,7 +155,7 @@
   				    
 	<c:forEach var="Profile" items="${results}">
 
-	<hr style="height:2px; width:90%; border-width:0; color:grey; background-color:grey; position: center; align:center">
+	<hr style="height:1px; width:90%; border-width:0; color:black; background-color:black; position: center; align:center">
 	
 	<div class="restaurant_" style="margin-left: 7.5%; display: flex;">
 	

@@ -1,6 +1,5 @@
 
 
-
 <!DOCTYPE html>
 <html>
   <head>
@@ -22,6 +21,9 @@
             	width:100%;
             	position:fixed;
             	top:0px;
+            }
+            .container-fluid {
+            float:right;
             }
             #filler {
             	height:100px;
@@ -48,6 +50,9 @@
             	transition: transform 3.5s;
             	animation: pulse 1s linear infinite;
 
+            }
+            #container {
+            z-index:-1000000;
             }
             @-webkit-keyframes "pulse" {
       0% {
@@ -235,6 +240,10 @@
             margin-left: -30%;
             font-family: Roboto;
       		}
+      		.loginandregister {
+      			margin-left:20%;
+      			float:left;
+      		}
     </style>
 
     <%HttpSession session2 = request.getSession(false); String name = null;
@@ -248,9 +257,9 @@
       <div id="contains-nav">
         <nav class="navbar navbar-dark bg-dark">
           <div class="container-fluid">
-            <a class="navbar-brand" href="index3.jsp">GigHub</a>
+            <a class="navbar-brand" href="index3.jsp" width="30px ">GigHub</a>
 
-            <video
+            <!-- <video
               autoplay
               playsinline
               style="pointer-events: none"
@@ -261,12 +270,13 @@
               muted
             >
               <source src="G-6.mp4" type="video/mp4" />
-            </video>
+            </video> -->
 
             <div class="HelloUser">${HelloUser}</div>
 
             <% if(name==null){ %>
-            <span class="loginandregister" style="margin-left: 60%">
+            <!-- <div class="loginandregister" style="width:70%"> -->
+              <div style="width:87%"></div>
               <button
                 class="btn btn-outline-success me-2"
                 id="custom"
@@ -276,15 +286,14 @@
                 Login
               </button>
               <button
-                class="btn btn-sm btn-outline-secondary"
+                class="btn btn-outline-success me-2"
                 id="custom"
                 type="button"
                 onclick="location.href='register.jsp'"
               >
                 Register
               </button>
-            </span>
-            <form class="d-flex">
+              <form class="d-flex">
               <button
                 class="btn btn-outline-success me-2"
                 id="custom"
@@ -294,9 +303,12 @@
                 Search For A User
               </button>
             </form>
+            
+            <!-- </div> -->
+            
 
             <% } %> <% if(name!=null){ %>
-					<div class="loginandregister" style="margin-left: 70%">
+				<div class="loginandregister" style="margin-left: 20%">
 						<form class="logout" action="ProfileDispatcher"
 							style='display: inline;' method="GET">
 							<button type="submit" class="btn btn-outline-success me-2"
@@ -315,6 +327,7 @@
 							<button type="submit" class="btn btn-outline-success me-2"
 								id="custom">Friends</button>
 						</form>
+
 
 						<form class="logout" style='display: inline;'
 							action="FRDispatcher" method="GET">
@@ -336,6 +349,18 @@
 					</div>
 
             <% } %>
+            <video
+              autoplay
+              playsinline
+              style="pointer-events: none"
+              width="120"
+              height="40"
+              autoplay="autoplay"
+              loop="loop"
+              muted
+            >
+              <source src="G-6.mp4" type="video/mp4" />
+            </video>
           </div>
         </nav>
       </div>
