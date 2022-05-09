@@ -49,7 +49,7 @@ public class Home extends HttpServlet {
     	{
     		System.out.println(e.getMessage());
     		request.setAttribute("error", e.getMessage());
-    		request.getRequestDispatcher("/index.jsp").forward(request, response);
+    		request.getRequestDispatcher("/index3.jsp").forward(request, response);
     		return;
     	}
     	try(
@@ -67,7 +67,7 @@ public class Home extends HttpServlet {
     		System.out.println(e.getStackTrace());
     	}
 		response.setContentType("text/html");
-		request.getRequestDispatcher("/index.jsp").forward(request, response);
+		request.getRequestDispatcher("/index3.jsp").forward(request, response);
 	}
 	public void destroy() {
 		

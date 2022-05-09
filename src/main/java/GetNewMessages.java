@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import util.Message;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serial;
@@ -66,7 +68,7 @@ public class GetNewMessages extends HttpServlet {
 		response.setCharacterEncoding("UTF-8");
 		long time = Long.parseLong(request.getParameter("time"));
 		String ctime = Constant.sdf.format(new Date(time));
-		System.out.println("new request: " + ctime);
+		//System.out.println("new request: " + ctime);
     	HttpSession session=request.getSession(false);
 		if(session != null)
 		{

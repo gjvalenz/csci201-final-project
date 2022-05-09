@@ -1,11 +1,25 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" %>
 <!--  TESTING ONLY -->
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="util.Message" %>
 <%
 String error = (String) request.getAttribute("error");
 Boolean errd = (error != null);
 int user_id = (int) request.getAttribute("user_id");
 String name = (String) request.getAttribute("name");
-String messages = (String) request.getAttribute("messages");
+int their_id = (int) request.getAttribute("their_id");
+String their_name = (String) request.getAttribute("their_name");
+ArrayList<Message> messages = (ArrayList<Message>) request.getAttribute("messages");
+String messagesStr = "[";
+for(Message m: messages)
+{
+	messagesStr += m.asJSON() + ',';
+}
+if(messages.size() > 0)
+{
+	messagesStr = messagesStr.substring(0, messagesStr.length() - 1);
+}
+messagesStr += "]";
  %>
 <!DOCTYPE html>
 <html>
@@ -50,15 +64,11 @@ String messages = (String) request.getAttribute("messages");
 	 <h1><% if (errd) {%>
 		<%= error %>
 		<%} else {%>
-		Hello, <%= name %>!</h1>
+		Hello, <%= name %>! Messaging: <%= their_name %>!</h1>
  <div class="row align-items-center">
-	 <div class="col-5">
+	 <div class="col-10">
 		<label for="message">Message:</label>
 		<input type="text" name="message" id="message" class="form-control"/>
-	 </div>
-	 <div class="col-5">
-		<label for="whom">To:</label>
-		<input type="text" id="whom" class="form-control"/>
 	 </div>
 	 <div class="col-2 text-center">
 		<button id="send-message" class="btn btn-success">Send</button>
@@ -67,23 +77,49 @@ String messages = (String) request.getAttribute("messages");
  <% } %>
  <div class="row mt-3 mb-4">
 	 <h3>Message Log:</h3>
-	<%= messages %>
- </div>
- <div class="row my-2">
-	<button id="get-messages" class="btn btn-warning col-2">Get Messages</button>
-	<div id="messages" class="col"></div>
- </div>
- <div class="row my-2">
-	<button id="check-new-messages" class="btn btn-warning col-2">Check New Messages</button>
-	<div id="new-messages" class="col"></div>
+	 <div id="messages">
+	 </div>
+	<% for(Message m: messages) {%>
+		
+	<%} %>
  </div>
  </div>
  <script>
+ var user_messages = <%= messagesStr %>;
+ 
+ function generateMessage(message)
+ {
+	 return `
+	 	<div class="row align-items-center">
+			<div><h3>\${message.nFrom}</h3>: <p>\${message.message}</p><p>Sent at: \${message.time}</p></div>
+		</div>`;
+ }
+
+ 
+ function addMessages(messages)
+ {
+	 $('#messages').empty();
+
+	 for(var i = 0; i < messages.length; i++)
+	 {
+		 $('#messages').append(generateMessage(messages[i]));
+	 }	 
+ }
+ 
+ function populateMessages(){
+	 addMessages(user_messages);
+ }
+ 
+ populateMessages();
+ 
  $('#send-message').click(function(){
-	 $.post('./api/message/send', {message: $('#message').val(), userID: parseInt($('#whom').val())}, function(data){
+	 var msg = $('#message').val();
+	 $.post('./api/message/send', {message: $('#message').val(), userID: <%= their_id %>}, function(data){
 	  	 if(data.success)
 	  	 {
-	  		 alert("Success! Message id is " + data.messageID);
+	  		 $('#message').val('');
+	  		 user_messages.push({ nFrom: "<%= name %>", message: msg, time: "Now" });
+	  		 populateMessages();
 	  	  }
 	  	 else
 	     {
@@ -92,32 +128,30 @@ String messages = (String) request.getAttribute("messages");
 	 });
  });
  
- $("#get-messages").click(function(){
-	 $.get('./api/messages/received', function(data){
+ setInterval(function(){ 
+	    //code goes here that will be run every 2 seconds.
+	     $.get('./api/messages/new', {time: Date.now() - 1000*2}, function(data){
 	  	 if(data.success)
 	  	 {
-	  		$("#messages").text(JSON.stringify(data.messages));
-	  	  }
-	  	 else
-	     {
-	  		 alert("Error: " + data.error);
-	     }
-	 }); 
- });
- 
- $("#check-new-messages").click(function(){
-	// 20 second buffer
-	$.get('./api/messages/new', {time: Date.now() - 1000*20}, function(data){
-	  	 if(data.success)
-	  	 {
-	  		$("#new-messages").text(JSON.stringify(data.messages));
+	  		var msgs = data.messages;
+	  		if(msgs.length > 0)
+	  		{
+	  			for(var i = 0; i < msgs.length; i++)
+	  			{
+	  				var newMsg = msgs[i];
+	  				newMsg.nFrom = "<%= their_name %>";
+	  				newMsg.nTo = "<%= name %>";
+	  				user_messages.push(newMsg);
+	  			}
+	  			populateMessages();
+	  		}
 	  	  }
 	  	 else
 	     {
 	  		 alert("Error: " + data.error);
 	     }
 	});
- });
+	}, 2500);
  </script>
 </body>
 </html>
