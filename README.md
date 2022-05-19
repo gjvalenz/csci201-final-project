@@ -14,6 +14,6 @@ Repository for CSCI201 Spring 2022 Final Group Project
 
 ## AWS MySQL Database Credentials
 Host: csci201-final-project-db.cdtddri9q3e5.us-east-2.rds.amazonaws.com  
-Username: cscigroupmember  
-Password: csci201spring2022  
-Port: 3306
+Username: #######
+Password: ##############  
+Port: #####
